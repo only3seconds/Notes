@@ -1,11 +1,25 @@
-###JDK和JRE的区别
-```
-JRE(Java Runtime Enviroment)是Java的运行环境。面向Java程序的使用者，而不是开发者。如果你仅下载并安装了JRE，那么你的系统只能运行Java程序。JRE是运行Java程序所必须环境的集合，包含JVM标准实现及 Java核心类库。它包括Java虚拟机、Java平台核心类和支持文件。它不包含开发工具(编译器、调试器等)。
+---
 
-JDK(Java Development Kit)又称J2SDK(Java2 Software Development Kit)，是Java开发工具包，它提供了Java的开发环境(提供了编译器javac等工具，用于将java文件编译为class文件)和运行环境(提 供了JVM和Runtime辅助包，用于解析class文件使其得到运行)。如果你下载并安装了JDK，那么你不仅可以开发Java程序，也同时拥有了运行Java程序的平台。JDK是整个Java的核心，包括了Java运行环境(JRE)，一堆Java工具tools.jar和Java标准类库 (rt.jar)。
-```
+# JDK和JRE的区别
 
-###枚举
+---
+	JRE(Java Runtime Enviroment)是Java的运行环境。面向Java程序的使用者，而不是开发者。如
+	果你仅下载并安装了JRE，那么你的系统只能运行Java程序。JRE是运行Java程序所必须环境的集合，
+	包含JVM标准实现及 Java核心类库。它包括Java虚拟机、Java平台核心类和支持文件。它不包含开发
+	工具(编译器、调试器等)。
+	
+	JDK(Java Development Kit)又称J2SDK(Java2 Software Development Kit)，是Java开发
+	工具包，它提供了Java的开发环境(提供了编译器javac等工具，用于将java文件编译为class文件)
+	和运行环境(提 供了JVM和Runtime辅助包，用于解析class文件使其得到运行)。如果你下载并安装了
+	JDK，那么你不仅可以开发Java程序，也同时拥有了运行Java程序的平台。JDK是整个Java的核心，包
+	括了Java运行环境(JRE)，一堆Java工具tools.jar和Java标准类库 (rt.jar)。
+
+---
+
+# 枚举
+
+---
+
 ```java
 class FreshJuice {
    enum FreshJuiceSize{ SMALL, MEDIUM , LARGE }
@@ -19,9 +33,14 @@ public class FreshJuiceTest {
 }
 ```
 
-###注释规范
-1、类注释
+---
+
+# 注释规范
+
+---
+### 类注释
 在每个类前面必须加上类注释，注释模板如下：
+
 ```java
 /**
 * Copyright (C), 2006-2010, ChengDu Lovo info. Co., Ltd.
@@ -34,13 +53,14 @@ public class FreshJuiceTest {
 */
 ```
 
-2、属性注释
+### 属性注释
 在每个属性前面必须加上属性注释，注释模板如下：
+
 ```java
 /** 提示信息 */
 private String strMsg = null;
 ```
-3、方法注释
+### 方法注释
 在每个方法前面必须加上方法注释，注释模板如下：
 ```java
 /**
@@ -51,7 +71,7 @@ private String strMsg = null;
 * @throws 异常类型.错误代码 注明从此类方法中抛出异常的说明
 */
 ```
-4、构造方法注释
+### 构造方法注释
 在每个构造方法前面必须加上注释，注释模板如下：
 ```java
 /**
@@ -61,7 +81,7 @@ private String strMsg = null;
 * @throws 异常类型.错误代码 注明从此类方法中抛出异常的说明
 */
 ```
-5、方法内部注释
+### 方法内部注释
 在方法内部使用单行或者多行注释，该注释根据实际情况添加。
 如：
 ```java
@@ -69,16 +89,19 @@ private String strMsg = null;
 Color bgColor = Color.RED
 ```
 
-###数据类型转换
-1、包装类过渡类型转换
+---
+
+# 数据类型转换
+
+---
+### 1. 包装类过渡类型转换
 ```java
 float f1=100.00f;
 Float F1=new Float(f1);
 double d1=F1.doubleValue();//F1.doubleValue()为Float类的返回double值型的方法
 ```
-2、字符串与其它类型间的转换
+### 2. 字符串与其它类型间的转换
 其它类型向字符串的转换
-```
  (1)调用类的串转换方法:X.toString();
  (2)自动转换:X+"";
  (3)使用String的方法:String.valueOf(X);
@@ -194,7 +217,7 @@ java.util.Arrays 类能方便地操作数组，它提供的所有方法都是静
 比较数组：通过 equals 方法比较数组中元素值是否相等。
 查找数组元素：通过 binarySearch 方法能对排序好的数组进行二分查找法操作。
 ```
-###可变参数
+# 可变参数
 ```java
 public class VarargsDemo {
     public static void main(String args[]) {
@@ -218,7 +241,13 @@ public class VarargsDemo {
     }
 }
 ```
-###文件 InputStream 和 OutputStream
+
+---
+
+# 文件 InputStream 和 OutputStream
+
+---
+
 ```java
 import java.io.*;
 
@@ -245,8 +274,14 @@ public class fileStreamTest{
   }
 }
 ```
-###Scanner类
-``可以通过 Scanner 类来获取用户的输入``
+
+---
+
+# Scanner类
+
+---
+可以通过 Scanner 类来获取用户的输入
+
 ```java
 import java.util.Scanner;
 
@@ -267,19 +302,22 @@ public class ScannerDemo {
     }
 }
 ```
-``输入的时候字符都是可见的，所以Scanner类不适合从控制台读取密码。从Java SE 6开始特别引入了Console类来实现这个目的。若要读取一个密码，可以采用下面这段代码``
+输入的时候字符都是可见的，所以Scanner类不适合从控制台读取密码。从Java SE 6开始特别引入了Console类来实现这个目的。若要读取一个密码，可以采用下面这段代码
 
 ```java
 Console cons = System.console();
 String username = cons.readline("User name: ");
 char[] passwd = cons.readPassword("Password: ");
 ```
-``
 为了安全起见，返回的密码存放在一维字符数组中，而不是字符串中。在对密码进行处理之后，应该马上用一个填充值覆盖数组元素。
-``
 
-### StringTokenizer
-``通过StringTokenizer类可以分解输入的整行得到的带空格的字符串。默认情况下，StringTokenizer以空格，制表符，换行符和回车符作为分割依据。``
+---
+
+# StringTokenizer
+
+---
+通过StringTokenizer类可以分解输入的整行得到的带空格的字符串。默认情况下，StringTokenizer以空格，制表符，换行符和回车符作为分割依据。
+
 ```java
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -296,24 +334,30 @@ class Test {
     }
 }
 ```
-结果
-```
-输入数据：
-runoob com
-分隔后：
-runoob
-com
-```
-### final 关键字
-```
-final声明类可以把类定义为不能继承的，即最终类；用于修饰方法，该方法不能被子类重写；被定义为 final 的实例变量不能被修改。
+	输入数据：
+	runoob com
+	分隔后：
+	runoob
+	com
 
-声明类：final class 类名 {//类体}
-声明方法：修饰符(public/private/default/protected) final 返回值类型 方法名(){//方法体}
-```
+---
+
+# final 关键字
+
+---
+
+- final声明类可以把类定义为不能继承的，即最终类；用于修饰方法，该方法不能被子类重写；被定义为 final 的实例变量不能被修改。
+
+- 声明类：final class 类名 {//类体}
+- 声明方法：修饰符(public/private/default/protected) final 返回值类型 方法名(){//方法体}
+
 **注:被声明为 final 类的方法自动地声明为 final，但是实例变量并不是 final**
 
-###父类的引用指向子类的对象
+---
+
+# 父类的引用指向子类的对象
+
+---
 ```java
 class Animal{
    public void move(){
@@ -341,21 +385,29 @@ public class TestDog{
    }
 }
 ```
-```language
 该程序将抛出一个编译错误，因为b的引用类型Animal没有bark方法
-```
-###Java 数据结构
-```
-枚举（Enumeration）
-位集合（BitSet）
-向量（Vector）
-栈（Stack）
-字典（Dictionary）
-哈希表（Hashtable）
-属性（Properties）
-集合框架(Collection)
-```
-###遍历 ArrayList
+
+---
+
+# Java 数据结构
+
+---
+
+- 枚举（Enumeration）
+- 位集合（BitSet）
+- 向量（Vector）
+- 栈（Stack）
+- 字典（Dictionary）
+- 哈希表（Hashtable）
+- 属性（Properties）
+- 集合框架(Collection)
+
+
+---
+
+# 遍历 ArrayList
+
+---
 ```java
 import java.util.*;
 
@@ -387,7 +439,12 @@ public class Test{
  }
 }
 ```
-###遍历 Map
+
+---
+
+# 遍历 Map
+
+---
 ```java
 import java.util.*;
 
@@ -422,7 +479,12 @@ public class Test{
 }
 
 ```
-### 泛型
+
+---
+
+# 泛型
+
+---
 ```java
 public class GenericTest {
     public static void main(String[] args) {
@@ -452,17 +514,22 @@ public class GenericTest {
        }
 }
 ```
-``
-<? extends T>表示该通配符所代表的类型是T类型的子类。
-<? super T>表示该通配符所代表的类型是T类型的父类。
-``
-###创建一个线程
-```
-通过实现 Runnable 接口；
-通过继承 Thread 类本身；
-通过 Callable 和 Future 创建线程。
-```
-###MySQL连接
+	<? extends T>表示该通配符所代表的类型是T类型的子类。
+	<? super T>表示该通配符所代表的类型是T类型的父类。
+
+
+---
+# 创建一个线程
+---
+
+- 通过实现 Runnable 接口；
+- 通过继承 Thread 类本身；
+- 通过 Callable 和 Future 创建线程。
+
+---
+# MySQL连接
+
+---
 ```java
 import java.sql.*;
 
@@ -529,10 +596,9 @@ public class MySQLDemo {
     }
 }
 ```
-```
-mysql
-驱动：com.mysql.jdbc.Driver
-URL：jdbc:mysql://machine_name:port/dbname
-注：machine_name：数据库所在的机器的名称；
-port：端口号，默认3306
-```
+
+	mysql
+	驱动：com.mysql.jdbc.Driver
+	URL：jdbc:mysql://machine_name:port/dbname
+	注：machine_name：数据库所在的机器的名称；
+	port：端口号，默认3306
