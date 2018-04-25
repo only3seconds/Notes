@@ -25,4 +25,4 @@ public class Example {
 }
 ```
 
-	
+## Q: Git 如何解决冲突？
