@@ -340,20 +340,135 @@ class Test {
 	runoob
 	com
 
----
-
-# final 关键字
 
 ---
+# Java 关键字
+---
+## final 
 
-- final声明类可以把类定义为不能继承的，即最终类；用于修饰方法，该方法不能被子类重写；被定义为 final 的实例变量不能被修改。
+### 1.final声明数据
+	final声明数据为常量，可以是编译时常量，也可以是运行时初始化后不能改变的常量。
+	对于基本类型，final使数值不变；
+	对于引用类型，final使引用不变，也就是不能指向其他对象，但是被引用的对象的本身是可以修改的
+	
+### 1.final声明方法
+	final声明方法表示该方法不能被子类覆盖；
+	private方法隐式地被指定为final.
+	
+### 2.final声明类
+	final声明类表示该类不能被继承；
+	被声明为final类的方法自动地声明为final，但是实例变量并不是 final
+	
 
-- 声明类：final class 类名 {//类体}
-- 声明方法：修饰符(public/private/default/protected) final 返回值类型 方法名(){//方法体}
+## static
+### 1. 静态变量
+	静态变量在内存中只存在一份，只在类初始化时被赋值一次
+	
+### 2. 静态方法
+	静态方法在类加载时就已经存在了，它不依赖于任何实例，所以static方法必须实现，不能被
+	abstract修饰
+	
+### 3. 静态语句块
+	静态语句块只在类初始化时运行一次
+```java
+public class Main {  
+      
+    public static void main(String args[]) {  
+            new subclass();  
+            new subclass("hello,world!");  
+    }   
+}  
 
-**注:被声明为 final 类的方法自动地声明为 final，但是实例变量并不是 final**
+class base{  
+
+    static {  
+        System.out.println("父类的静态代码块");  
+    } 
+     
+    {  
+        System.out.println("父类的非静态代码块");  
+    } 
+     
+    public base(){  
+        System.out.println("父类的无参构造方法");  
+    }  
+    
+    public base(String str){  
+        System.out.println("父类的有参构造方法：参数为："+str);  
+    }  
+}  
+
+class subclass extends base{  
+    static {  
+        System.out.println("子类的静态代码块");  
+    } 
+     
+    {  
+        System.out.println("子类的非静态代码块");  
+    }  
+    
+    public subclass(){  
+        System.out.println("子类的无参构造方法");  
+    }  
+  
+    public subclass(String str) {  
+        System.out.println("子类的有参构造方法：参数为："+str);  
+    }  
+}  
+```
+运行结果：
+
+	父类的静态代码块
+	子类的静态代码块
+	父类的非静态代码块
+	父类的无参构造方法
+	子类的非静态代码块
+	子类的无参构造方法
+	父类的非静态代码块
+	父类的无参构造方法
+	子类的非静态代码块
+	子类的有参构造方法：参数为：hello,world!
+	
+### 4.静态内部类
+	静态内部类是内部类的一种，它不依赖于外部类，且不能访问外部类的非static变量和方法
+	
+### 5.静态导包
+	在使用静态变量或方法时不用再指明ClassName
+```java
+import static com.xxx.ClassName.*
+```
 
 ---
+# Object通用方法	
+---
+
+## 概览
+
+### 1.public final native Class<?> getClass()
+	getClass方法用于获得一个对象的类型类
+
+
+### 2.public String toString()
+	默认返回 ToStringExample@4554617c 这种形式，其中 @ 后面的数值为散列码的无符号十六进制
+	表示。
+	
+### 3.public boolean equals(Object obj)
+#### equals 与 == 的区别
+	对于基本类型，==判断两个值是否相同，没有equals方法
+	对于引用类型，==判断两个实例是否引用同一个对象，equals判断引用的对象是否等价
+
+#### 实现
+	1.检查两个实例是否引用同一个对象，如果是，直接返回true
+	2.检查是否是同一个类型，如果不是，返回false
+	3.将Object类进行转型
+	4.判断每个关键域是否相等
+	
+### 4.public native int hashCode()
+	1.hasCode() 返回散列值，而 equals() 是用来判断两个实例是否等价。等价的两个实例散列值一定
+	要相同，但是散列值相同的两个实例不一定等价。
+	2.在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证相等的两个实例散列值也等价
+	
+
 
 # 父类的引用指向子类的对象
 

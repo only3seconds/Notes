@@ -124,3 +124,8 @@
 ## 3. TreeHashMap
 - 基于红黑树实现
 
+
+---
+# 参考资料
+---
+[Java7/8 中的 HashMap 和 ConcurrentHashMap 全解析](http://www.importnew.com/28263.html)
