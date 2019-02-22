@@ -1,4 +1,4 @@
-﻿---
+---
 
 # java多线程技能
 
@@ -8,7 +8,7 @@
 	实现多线程编程的方式主要有两种，一种是继承 Thread 类，另一种是实现 Runnable 接口.
 
 ### 继承 Thread 类
- **start()** 方法通知‘线程规划器’ 此线程已经准备就绪，等待调用线程的 run() 方法，具有异步执行的效果；如果调用 **thread.run()** 则是同步，此线程对象不交给 ‘线程规划器’来进行处理，而是由mian 主线程来调用，必须等run执行完才可以执行后面的代码。
+ **start()** 方法通知‘线程规划器’ 此线程已经准备就绪，等待调用线程的 run() 方法，具有异步执行的效果；如果调用 **thread.run()** 则是同步，此线程对象不交给 ‘线程规划器’来进行处理，而是由 main 主线程来调用，必须等run执行完才可以执行后面的代码。
 
 ### 实现 Runnable 接口
     Thread.java 的构造函数
@@ -27,7 +27,7 @@
 
 - currentThread()方法可以返回代码段正在被哪个线程调用的信息
 
-- isAlive()方法就是判断当前的线程是否处于活动状态，活动状态就是线程处于运行或准备运行的状态
+- isAlive()方法就是判断当前的线程是否处于活动状态，活动状态就是线程处于运行或准备运行,即Runnable 状态
 
 - 方法 sleep()的作用是在指定的毫秒数内让‘正在执行的线程’休眠(暂停执行)。这个正在执行的线程就是 this.currentThread()返回的线程。
 
@@ -40,7 +40,7 @@
 
 - **interrupt()**方法仅仅是在当前线程中打了一个停止的标记，并不是真正的停止线程
 - **interrupted()**                public static boolean interrupted()
-测试当前线程是否已经中断，当前线程指运行 this.interrupted()方法的线程 interrupted()方法具有清楚状态的功能.
+测试当前线程是否已经中断，当前线程指运行 this.interrupted()方法的线程 interrupted()方法具有清除状态的功能.
 
 code:
 
@@ -116,6 +116,7 @@ code解释：
 - 锁对象的改变 : 只要对象不变，即使对象的属性被改变，运行的结果还是同步
 
 -  内置类
+
 	```java
 	import test.PublicClass.PrivateClass;
 	PrivateClass privateClass = PublicClass.new privateClass();
@@ -124,7 +125,7 @@ code解释：
     import test.PublicClass.PrivateClass;
     PrivateClass privateClass = new privateClass();
 	```
-     内置类与同步本质还是看持有的锁是不是相同的
+  内置类与同步本质还是看持有的锁是不是相同的
 
 
 
@@ -159,6 +160,8 @@ code解释：
 
 
 ## 1. 等待／通知机制
+	wait() notify() notifyAll() 都属于 Object 的一部分，而不属于 Thread
+	
 - 只能在同步方法或同步块中调用 wait()方法和 notify() 方法，如果没有持有适当的锁，则抛出 IlleagalMonitorStateException
 
 - wait 使线程停止运行，而 notify 使停止的线程继续运行
@@ -209,9 +212,10 @@ code解释：
 ---
 
 ## 1. 使用 ReentrantLock 类
-- 关键字 synchronized 与 wait() 和 notify()/notifyAll() 方法相结合可以实现等待／通知模式； 类 **ReentrantLock **可以借助 **Condition** 对象实现同样的功能
+- 关键字 synchronized 与 wait() 和 notify()/notifyAll() 方法相结合可以实现等待／通知模式； 类**ReentrantLock**可以借助 **Condition** 对象实现同样的功能
 
 - 使用 Condition 实现等待／通知
+
 ```java
   private Lock lock = new ReentrantLock();
   public Condition condition = lock.newCondition();
@@ -226,6 +230,7 @@ code解释：
 ```
 
 - 使用多个 Condition 对象实现唤醒指定种类的线程
+
 ```java
 private Lock lock = new ReentrantLock();
 public Condition conditionA = lock.newCondition();
@@ -260,7 +265,8 @@ public void signalAll_B(){
     lock.unlock();
 }
 ```
-- **公平锁与非公平锁** 公平锁：线程获取锁的顺序是按照线程加锁的顺序来分配的 Lock lock = new ReentrantLock(true); 非公平锁：抢占机制，随机获得锁. 在默认的情况下，ReentrantLock 类使用的是非公平锁
+- **公平锁与非公平锁** 
+公平锁：线程获取锁的顺序是按照线程加锁的顺序来分配的 Lock lock = new ReentrantLock(true); 非公平锁：抢占机制，随机获得锁. 在默认的情况下，ReentrantLock 类使用的是非公平锁
 
 ## 2. 一些方法
 - 方法 **int getHoldCount()** 的作用是查询当前线程保持此锁定的个数，也就是调用 lock() 方法的次数 lock.getHoldCount()

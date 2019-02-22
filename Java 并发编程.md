@@ -18,4 +18,340 @@
 
 - 多线程：多线程是程序设计的逻辑层概念，它是进程中并发运行的一段代码。多线程只是实现异步的一种手段。
 
+### 2. 进程 & 线程
+
+（1）进程：进程是操作系统分配资源的最小单位
+
+（2）线程：线程是 CPU 调度的最小单位
+
+
 ## 二. 线程状态转换
+
+![](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/pics/96706658-b3f8-4f32-8eb3-dcb7fc8d5381.jpg)
+
+- New（新建): 创建后尚未启动
+
+- Runnable（可运行）:可能正在运行，也可能正在等待 CPU 时间片。包含了操作系统线程状态中的 运行（Running ） 和 就绪（Ready）。
+
+- Blocked（阻塞）：这个状态下，是在多个线程有同步操作的场景，比如正在等待另一个线程的 synchronized 块的执行释放，或者可重入的 synchronized 块里别人调用 wait() 方法，也就是线程在等待进入临界区。
+
+- Waiting（无限期等待）：等待其它线程显式地唤醒，否则不会被分配 CPU 时间片。
+	- 没有设置 Timeout 参数的 Object.wait() 方法  -> Object.notify() / Object.notifyAll()
+
+	- 没有设置 Timeout 参数的 Thread.join() 方法 -> 被调用的线程执行完毕
+	
+- Timed Waiting（限期等待）：无需等待其它线程显式地唤醒，在一定时间之后会被系统自动唤醒。
+	- Thread.sleep() 方法 -> 时间结束
+
+	- 设置了 Timeout 参数的 Object.wait() 方法 -> 时间结束 / Object.notify() / Object.notifyAll()
+
+	- 设置了 Timeout 参数的 Thread.join() 方法 -> 时间结束 / 被调用的线程执行完毕
+
+- Terminated（死亡）：一是线程因为 run 方法正常退出而自然死亡；二是因为一个没有捕获的异常终止了 run 方法而意外死亡。
+
+## 三. Java 实现多线程的方式
+
+### 1. 继承 Thread 类
+
+```java
+public class MyThread extends Thread {
+    public void run() {
+        // ...
+    }
+}
+
+public static void main(String[] args) {
+    MyThread mt = new MyThread();
+    mt.start();
+}
+```
+
+### 2. 实现 Runnable 接口
+
+```java
+public class MyRunnable implements Runnable {
+    public void run() {
+        // ...
+    }
+}
+public static void main(String[] args) {
+    MyRunnable instance = new MyRunnable();
+    Thread thread = new Thread(instance);
+    thread.start();
+}
+```
+
+### 3. 实现 Callable 接口
+Callable 可以有返回值，返回值通过 FutureTask 进行封装。
+
+```java
+public class MyCallable implements Callable<Integer> {
+    public Integer call() {
+        return 123;
+    }
+}
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+        MyCallable myCallable = new MyCallable();
+        FutureTask<Integer> futureTask = new FutureTask<>(myCallable);
+        Thread thread = new Thread(futureTask);
+        thread.start();
+        System.out.println(futureTask.get());
+    }
+```
+
+总结：实现接口会更好一些，因为 Java 不支持多重继承，因此继承了 Thread 类就无法继承其它类，但是可以实现多个接口。
+
+⚠️ **start()** 方法通知‘线程规划器’ 此线程已经准备就绪，等待调用线程的 run() 方法，具有异步执行的效果；如果调用 **thread.run()** 则是同步，此线程对象不交给 ‘线程规划器’来进行处理，而是由 main 主线程来调用，必须等run执行完才可以执行后面的代码。
+
+## 四. 线程常用操作
+
+### 1. 常用方法
+
+- getId()方法就是获得线程的唯一标志。
+
+- currentThread()方法可以返回代码段正在被哪个线程调用的信息
+
+- isAlive()方法就是判断当前的线程是否处于活动状态，活动状态就是线程处于运行或准备运行,即Runnable 状态
+
+- 方法 sleep()的作用是在指定的毫秒数内让‘正在执行的线程’休眠(暂停执行)。这个正在执行的线程就是 this.currentThread()返回的线程。sleep() 可能会抛出 InterruptedException，因为异常不能跨线程传播回 main() 中，因此必须在本地进行处理。线程中抛出的其它异常也同样需要在本地进行处理。
+
+- 对静态方法 Thread.yield() 的调用声明了当前线程已经完成了生命周期中最重要的部分，可以切换
+给其它线程来执行。该方法只是对线程调度器的一个建议，而且也只是建议具有相同优先级的其它线程可以运行。
+
+**为什么 Thread 的 sleep() 和 yield() 方法是静态的?**
+
+	Thread 类的 sleep() 和 yield() 方法将在正在执行的线程上运行, 所以在其他处于等待状态的
+	线程上调用这些方法是没有意义的。这就是为什么这些方法是静态的。它们可以在当前正在执行的线程中
+	工作，避免程序员错误的认为可以在其他非运行线程调用这些方法。
+	
+- setDamon(true)设置为守护线程
+
+**什么是守护线程？**
+
+	当我们在java程序中创建一个线程的时候，它默认就是用户线程。
+
+	任何一个守护线程是在后台运行的线程，它是所有用户线程的保姆，它为其他线程的运行提供便利服
+	务，最典型的就是GC(垃圾回收器）。
+	守护线程不会阻止 java 虚拟机的终止，当没有用户线程运行的时候，jvm 虚拟机关闭程序并且退
+	出。
+	
+### 2. 中断
+
+一个线程执行完毕之后会自动结束，如果在运行过程中发生异常也会提前结束。
+
+ - interrupt()
+ 
+	通过调用一个线程的 interrupt() 来中断该线程，如果该线程处于Blocked、Waitting或者
+	Timed Waitting 状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能
+	中断 I/O 阻塞和 synchronized 锁阻塞。
+	
+- interrupted()
+
+	如果一个线程的 run() 方法执行一个无限循环，并且没有执行 sleep() 等会抛出 
+	InterruptedException 的操作，那么调用线程的 interrupt() 方法就无法使线程提前结束。
+	但是调用 interrupt() 方法会设置线程的中断标记，此时调用 interrupted() 方法会返回 
+	true。因此可以在循环体中使用 interrupted() 方法来判断线程是否处于中断状态，从而提前结束
+	线程。
+	
+```java
+
+public class InterruptExample {
+
+    private static class MyThread extends Thread {
+        @Override
+        public void run() {
+            while (!interrupted()) {
+                System.out.println("PPP");
+            }
+            System.out.println("Thread end");
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread = new MyThread();
+        thread.start();
+        thread.interrupt();
+    }
+}
+```
+
+
+## 五. 互斥同步 Synchronized
+
+Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问，第一个是 JVM 实现的 synchronized，而另一个是 JDK 实现的 ReentrantLock。
+
+### 1. synchronized
+(1) 同步一个方法
+
+- 关键字 synchronized 取得的锁是对象锁，作用于同一个对象。哪个线程先执行带 synchronized 关键字的方法，哪个线程就持有该方法所属对象的锁 Lock，其他访问该对象的线程只能等待。如果多个线程访问多个对象，则 JVM 会创建多个锁.
+
+- 在一个 synchronized 方法／块的内部调用本类的其他 synchronized 方法／块时，是永远可以得到的; 子类是完全可以通过 ‘可重入锁’ 调用父类的同步方法的
+
+- 出现异常，锁自动释放
+
+- 同步不能继承，所以还需在子类的方法中添加 synchronized 关键字
+
+(2) 同步一个代码块
+
+- 和 synchronized 方法一样，synchronized（this) 代码块也是锁定当前对象的
+
+(3) 同步一个类
+
+- 用于整个类，也就是说两个线程调用同一个类的不同对象上的这种同步语句，也会进行同步
+
+(4) 同步一个静态方法
+
+- 作用于整个类
+
+### 2. volatile 关键字在 java 中有什么作用？
+	volatile 的作用是强制从公共堆栈中取得变量的值，而不是从线程私有数据栈中取得变量的值。多线
+	程读取共享变量时可以获取最新值.
+	对于 volatile 修饰的变量， JVM只是保证从主存加载到线程工作内存的值是最新的; 访问
+	volatile变量并不会执行加锁操作，因此不会使执行线程阻塞; volatile 变量解决的是变量在多个
+	线程之间的可见性。
+	
+### 3. 比较 synchronized 和 volatile
+	(1) 关键字 volatile 是线程同步的轻量级实现，volatile 性能更好，volatile 只能用
+		来修饰变量，synchronized 用来修饰方法和代码块;
+	(2) 多线程访问 volatile 不会发生阻塞;
+	(3) volatile 保证数据的可见性，但不保证原子性； synchronized 既可以保证原子性，
+		也可以保证可见性，因为它会将私有内存和公有内存的数据做同步;
+	(4) volatile 解决的是变量在多个线程之间的可见性； 而synchronized 解决的是多个线
+		程之间访问资源的同步性.
+		
+### 4. 线程间通信
+
+**（1） 等待／通知 机制**
+
+- 只能在同步方法或同步块中调用 wait()方法和 notify() 方法，如果没有持有适当的锁，则抛出 IlleagalMonitorStateException
+
+- wait 使线程停止运行，而 notify 使停止的线程继续运行
+
+- 每个锁对象都有两个队列，分别是就绪队列和阻塞队列，一个线程被 wait 后就会进入阻塞队列
+
+- 当方法 wait() 被执行后，锁被自动释放; 当方法 notify()被执行后，锁不自动释放，必须执行完 notify()方法所在的 synchronized 同步代码块后才释放锁
+
+- sleep()方法不释放锁
+
+- 当线程呈 wait()状态时，调用线程对象的 interrupt()方法会出现 InterruptedException 异常
+
+- 调用 notify()方法一次只能随机通知一个线程进行唤醒，notifyAll() 可以唤醒全部线程
+
+- wait(long) 等待某一时间内是否有线程对锁进行唤醒，如果超过这个时间则自动唤醒
+
+**wait() 和 sleep() 有什么区别 ？**
+
+	wait 是 Object类的方法，sleep 是 Thread 类的方法
+	sleep 休眠一定时间后自动唤醒，无参数的 wait 需要其他线程 notify
+	wait 释放锁，sleep 不释放锁
+	
+**（2）方法 join 的使用**
+
+- 方法 join 的作用是使所属的线程对象 x 正常执行 run() 方法中的任务，而使当前线程 z 进行无限期的阻塞，等待线程 x 销毁后再继续执行线程 z 后面的代码
+
+- join 在内部使用 wait() 方法进行等待
+
+- 在join()过程中，如果当前线程对象被中断 interrupt()，则当前线程出现异常
+
+**(3)类 ThreadLocal 的使用**
+ 
+- 类 ThreadLocal 解决的是**变量在不同线程间的隔离性**，也就是不同线程拥有自己的值，不同线程中的值是可以放入 ThreadLocal类中进行保存的
+
+- 第一次调用 ThreadLocal 类对象的 get() 方法时返回的值是 null ，可以通过继承 ThreadLocal 类，覆盖 intialValue() 方法赋予初始值
+
+## 六. 互斥同步 ReentrantlLock 类
+
+- 关键字 synchronized 与 wait() 和 notify()/notifyAll() 方法相结合可以实现等待／通知模式； 类**ReentrantLock**可以借助 **Condition** 对象实现同样的功能
+
+- 使用 Condition 实现等待／通知
+
+```java
+  private Lock lock = new ReentrantLock();
+  public Condition condition = lock.newCondition();
+  ......
+  lock.lock(); //获取同步监视器
+  ......
+  condition.await(); / condition.await(long time, TimeUnit unit);
+  ......
+  condition.signal(); / condition.signalAll();
+  ......
+  lock.unlock(); //释放锁
+```
+
+- 使用多个 Condition 对象实现唤醒指定种类的线程
+
+```java
+private Lock lock = new ReentrantLock();
+public Condition conditionA = lock.newCondition();
+public Condition conditionB = lock.newCondition();
+  	......
+public void awaitA(){
+	lock.lock();
+    ......
+    conditionA.await();
+    ......
+    lock.unlock();
+  	}
+public void awaitB(){
+    lock.lock();
+    ......
+    conditionB.await();
+    ......
+    lock.unlock();
+  	}
+public void signalAll_A(){
+	lock.lock();
+    ......
+    conditionA.signalAll();
+    ......
+    lock.unlock();
+}
+public void signalAll_B(){
+	lock.lock();
+    ......
+    conditionB.signalAll();
+    ......
+    lock.unlock();
+}
+```
+- 公平锁与非公平锁
+
+	公平锁：线程获取锁的顺序是按照线程加锁的顺序来分配的 Lock lock = new ReentrantLock(true);
+	非公平锁：抢占机制，随机获得锁. 在默认的情况下，ReentrantLock 类使用的是非公平锁
+
+
+## 七.  Executor 线程池框架	
+
+	Executor 管理多个异步任务的执行，而无需程序员显式地管理线程的生命周期。这里的异步是指多个
+	任务的执行互不干扰，不需要进行同步操作。
+	
+**主要有3种 Executor线程池:**
+
+- CachedThreadPool：一个任务创建一个线程；
+
+- FixedThreadPool：所有任务只能使用固定大小的线程；
+
+- SingleThreadExecutor：相当于大小为 1 的 FixedThreadPool。
+
+**为什么引入Executor线程池框架？**
+
+- 调用 new Thread() 创建的线程缺乏管理，而且可以无限制创建，之间相互竞争，会导致过多占用系统资源。
+
+- 线程池可以重用存在的线程，减少对象创建、消亡的开销。
+
+- 线程池提供定时执行、定期执行、单线程、并发数控制等功能。
+
+	
+
+
+
+	
+
+
+
+
+
+
+
+
+
