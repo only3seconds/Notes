@@ -1,5 +1,7 @@
 # 深入理解Java虚拟机
 
+![](https://img-blog.csdnimg.cn/2019022114204285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
+
 ## 一. 运行时数据区域
 
 
