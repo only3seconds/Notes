@@ -238,6 +238,9 @@ lambda 表达式只能引用标记了 final 的外层局部变量，这就是说
 
 ### transient
 
+	Java 的 transient 关键字为我们提供了便利，你只需要实现 Serilizable 接口，将不需要序列
+	化的属性前添加关键字 transient，序列化对象的时候，这个属性就不会序列化到指定的目的地中。
+
 ###  native
 
 ## 四. 基本数据类型与运算
