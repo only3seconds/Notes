@@ -27,7 +27,7 @@
 
 ## 二. 线程状态转换
 
-![](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/pics/96706658-b3f8-4f32-8eb3-dcb7fc8d5381.jpg)
+![](https://img-blog.csdnimg.cn/20190313215936761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
 - New（新建): 创建后尚未启动
 
