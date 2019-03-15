@@ -461,6 +461,60 @@ public void signalAll_B(){
 	volatile的简单变量如果当前值与该变量以前的值相关，那么 volatile 关键字不起作用，也就是说
 	如下的表达式都不是原子操作：“count++”、“count = count+1”。
 	
+### 5. 如何减少线程上下文切换？
+
+线程不是越多就越好的，因为线程上下文切换是有性能损耗的
+
+减少线程上下文切换的方法：
+
+	（1）无锁并发编程。多线程竞争时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避
+	    免使用锁，如将数据的 ID 按照Hash取模分段，不同的线程处理不同段的数据
+	    
+	（2）CAS算法。Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
+	
+	（3）控制线程数量。如果是IO密集型的话，线程可以多一些。如果是CPU密集型的话，线程不宜太多。
+
+	（4）协程。在单线程里实现多任务的调度，并在单线程里维持多个任务间的切换。协程可以看成是用户
+	    态自管理的“线程”。不会参与CPU时间调度，没有均衡分配到时间。非抢占式的
+	    
+### 6. 线程间通信和进程间通信
+
+**线程间通信：**
+
+- synchronized 同步，质上就是 “共享内存” 式的通信；
+
+- while 轮询的方式，线程A不断地改变条件，线程 ThreadB 不停地通过 while 语句检测这个条件是否成立；
+
+- wait/notify 机制；
+
+- 管道通信，java.io.PipedInputStream 和 java.io.PipedOutputStream 进行通信。
+
+**进程间通信：**
+
+- 管道（Pipe）、命名管道（named pipe）
+
+- 信号（Signal）
+
+- 消息（Message）队列：消息队列克服了信号承载信息量少，管道只能承载无格式字节流以及缓冲区大小受限等缺
+
+- 共享内存 
+
+- 内存映射（mapped memory）每一个使用该机制的进程通过把一个共享的文件映射到自己的进程地址空间来实现通信。
+
+- 信号量（semaphore）
+
+- 套接口（Socket），可用于不同机器之间的进程间通信
+
+### 7. 并发包(J.U.C)下面，都用过什么？
+
+![](https://img-blog.csdnimg.cn/20190315104742997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
+
+### 8. 从volatile说到,i++原子操作,线程安全问题
+
+[从volatile说到,i++原子操作,线程安全问题](https://blog.csdn.net/zbw18297786698/article/details/53420780)
+
+
+	
 
 
 
