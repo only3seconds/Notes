@@ -90,12 +90,20 @@ File 类可以用于表示文件和目录的信息，但是它不表示文件的
 
 ## 五. 网络操作：Socket
 
-	服务器绑定端口：server = new ServerSocket(PORT)
-	服务器阻塞监听：socket = server.accept()
-	服务器开启线程：new Thread(Handle handle)
-	服务器读写数据：BufferedReader PrintWriter
-	客户端绑定IP和PORT：new Socket(IP_ADDRESS, PORT)
-	客户端传输接收数据：BufferedReader PrintWriter
+**Stock通信实现流程:**
+
+1. 服务器绑定端口：server = new ServerSocket(PORT)
+2. 服务器阻塞监听：socket = server.accept()
+3. 服务器开启线程：new Thread(Handle handle)
+4. 服务器读写数据：BufferedReader PrintWriter
+5. 客户端绑定IP和PORT：new Socket(IP_ADDRESS, PORT)
+6. 客户端传输接收数据：BufferedReader PrintWriter
+	
+**Socket的特点:**
+
+1. Socket基于TCP链接，数据传输有保障
+2. Socket适用于建立长时间链接
+3. Socket编程通常应用于即时通讯
 
 ## 六. Java 中的 NIO，BIO，AIO
 
