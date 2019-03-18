@@ -204,9 +204,27 @@ public static final int value = 123;//value 被初始化为123
 
 ### 3. 类加载器
 
+虚拟机设计团队把类加载阶段中的 “通过一个类的全限定名来获取描述此类的二进制字节流（即字节码）” 这个动作放到 Java 虚拟机外部去实现，以便让应用程序自己决定如何去获取所需要的类（通过一个类的全限之名获取描述此类的二进制字节流）。实现这个动作的代码模块称为 **“类加载器”**。
+
 #### （1）类与类加载器
 
+- 两个类相等：只有被同一个类加载器加载的类才可能会相等。相同的字节码被不同的类加载器加载的类不相等。
+
 #### （2）类加载器分类
+
+从 Java 虚拟机的角度来讲，只存在以下两种不同的类加载器：
+
+- 启动类加载器（Bootstrap ClassLoader），这个类加载器用 C++ 实现，是虚拟机自身的一部分；
+- 所有其他类的加载器，这些类由 Java 实现，独立于虚拟机外部，并且全都继承自抽象
+类 java.lang.ClassLoader。
+
+从 Java 开发人员的角度看，类加载器可以划分得更细致一些：
+
+- 启动类加载器（Bootstrap ClassLoader）
+- 扩展类加载器（Extension ClassLoader)
+- 应用程序类加载器（Application ClassLoader）
+- 自定义类加载器
+
 
 #### （3）双亲委派模型
 
@@ -216,11 +234,116 @@ public static final int value = 123;//value 被初始化为123
 	
 ![](https://img-blog.csdnimg.cn/20190317214054853.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
+**双亲委派概念**
+
+子加载器通过组合来复用父加载器的代码，而不是使用继承。
+
+	如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这
+	个请求委派给父类加载器去完成，每一个层次的加载器都是如此，因此所有的类加载请
+	求都会传给顶层的启动类加载器，只有当父加载器反馈自己无法完成该加载请求（该加
+	载器的搜索范围中没有找到对应的类）时，子加载器才会尝试自己去加载。
+
 ## 五.  Student s = new Student(); 在内存中做了哪些事情
+
+1. 加载 Student.class 文件进内存
+2. 在栈内存为 s 开辟空间
+3. 在堆内存为 Student 对象开辟空间
+4. 对 Student 对象的成员变量进行默认初始化
+5. 对 Student 对象的成员变量进行显示初始化
+6. 通过构造方法对 Student 对象的成员变量赋值
+7. Student 对象初始化完毕，把对象地址赋值给 s 变量
+
 
 ## 六. Java 虚拟机工具
 
-## 七. Java 虚拟机调优秀
+JDK 本身提供了很多方便的 JVM 性能调优监控工具，除了 jps、jstat、jinfo、jmap、jhat、jstack 等小巧的工具，还有集成式的 jvisualvm 和 jconsole。
+
+### 1. jps
+
+	jps（JVM Process Status Tool，虚拟机进程监控工具），这个命令可以列出正
+	在运行的虚拟机进程，并显示虚拟机执行主类名称，以及这些进程的本地虚拟机唯一
+	ID。
+
+**语法格式**
+
+	jps [options] [hostid]
+	
+**options参数**
+
+	-q 不输出类名、Jar名和传入main方法的参数
+	-m 输出传入main方法的参数
+	-l 输出main类或Jar的全限名
+	-v 输出传入JVM的参数
+	
+### 2. jstat
+
+	jstat（JVM Statistics Monitoring Tool，虚拟机统计信息监视工具），这个
+	命令用于监视虚拟机各种运行状态信息。它可以显示本地或者远程虚拟机进程中的类装
+	载、内存、垃圾收集、JIT编译等运行数据，是运行期间定位虚拟机性能问题的首选工
+	具。
+
+**需要每 1000 毫秒查询一次进程 3692 垃圾收集状况，一共查询 10 次**
+
+	jstat -gcutil 3692 1000 10
+	
+### 3. jinfo
+
+	jinfo （Configuration Info for Java，配置信息工具） 这个命令可以实时地	查看和调整虚拟机各项参数。
+
+### 4. jmap
+
+### 5. jhat
+
+### 6. jstack
+
+	jstack（Java Stack Trace，Java堆栈跟踪工具），这个命令用于查看虚拟机当
+	前时刻的线程快照。线程快照就是当前虚拟机内每一条线程正在执行的方法堆栈的集
+	合。
+
+### 7. jconsole
+
+JConsole 中，您将能够监视 JVM 内存的使用情况、线程堆栈跟踪、已装入的类和 VM 信息以及 CE MBean。
+
+	jconsole：一个 java GUI 监视工具，可以以图表化的形式显示各种数据。并可通	过远程连接监视远程的服务器VM。
+	
+### 8. jvisualvm
+
+	jvisualvm 同 jconsole 都是一个基于图形化界面的、可以查看本地及远程的
+	JAVA GUI 监控工具，Jvisualvm 同 jconsole 的使用方式一样，直接在命令行
+	打入 jvisualvm 即可启动，jvisualvm 界面更美观一些，数据更实时
+
+## 七. Java 虚拟机调优
+
+## 八. 内存泄露
+
+### 1. 什么是内存泄露？
+
+在 Java 中，内存泄漏就是存在一些被分配的对象，这些对象有下面两个特点
+
+- 这些对象是可达的，即在有向图中，存在通路可以与其相连；
+- 这些对象是无用的，即程序以后不会再使用这些对象。
+
+### 2. 内存泄漏典型例子
+
+```java 
+Vector v = new Vector(10);
+for (int i = 1; i < 100; i++) {
+    Object o = new Object();
+    v.add(o);
+    o = null;   
+}
+```
+
+分析：Vector 仍然引用该对象，所以这个对象对 GC 来说是不可回收的。
+
+### 3. 内存泄露查询工具
+
+- MemoryAnalyzer
+- EclipseMAT
+- JProbe
+
+## 九. 虚拟机参数
+
 
 
 
