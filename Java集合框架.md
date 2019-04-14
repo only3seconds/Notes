@@ -247,7 +247,7 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 **Java8 改进**
 
-	1. 结构上和 java8 HashMap 基本一样，链表过长时会转换为红黑树。
+	1. 结构上和 java7 HashMap 基本一样，链表过长时会转换为红黑树。
 	
 	2. JDK 1.8 的实现不是用了 Segment，Segment 属于重入锁 ReentrantLock。JDK 1.8 使
 	   用了 CAS 操作来支持更高的并发度，在 CAS 操作失败时使用内置锁 synchronized。
