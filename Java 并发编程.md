@@ -1,7 +1,4 @@
-# Java 并发编程
-****
-
-## 一. 区分一些概念
+# 一. 区分一些概念
 
 ### 1. 并行、并发 & 同步、互斥 & 异步、多线程
 
@@ -25,7 +22,7 @@
 （2）线程：线程是 CPU 调度的最小单位
 
 
-## 二. 线程状态转换
+# 二. 线程状态转换
 
 ![](https://img-blog.csdnimg.cn/20190313215936761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
@@ -49,9 +46,9 @@
 
 - Terminated（死亡）：一是线程因为 run 方法正常退出而自然死亡；二是因为一个没有捕获的异常终止了 run 方法而意外死亡。
 
-## 三. Java 实现多线程的方式
+# 三. Java 实现多线程的方式
 
-### 1. 继承 Thread 类
+## 1. 继承 Thread 类
 
 ```java
 public class MyThread extends Thread {
@@ -66,7 +63,7 @@ public static void main(String[] args) {
 }
 ```
 
-### 2. 实现 Runnable 接口
+## 2. 实现 Runnable 接口
 
 ```java
 public class MyRunnable implements Runnable {
@@ -81,7 +78,7 @@ public static void main(String[] args) {
 }
 ```
 
-### 3. 实现 Callable 接口
+## 3. 实现 Callable 接口
 Callable 可以有返回值，返回值通过 FutureTask 进行封装。
 
 ```java
@@ -99,13 +96,13 @@ public static void main(String[] args) throws ExecutionException, InterruptedExc
     }
 ```
 
-总结：实现接口会更好一些，因为 Java 不支持多重继承，因此继承了 Thread 类就无法继承其它类，但是可以实现多个接口。
+**总结：**实现接口会更好一些，因为 Java 不支持多重继承，因此继承了 Thread 类就无法继承其它类，但是可以实现多个接口。
 
 ⚠️ **start()** 方法通知‘线程规划器’ 此线程已经准备就绪，等待调用线程的 run() 方法，具有异步执行的效果；如果调用 **thread.run()** 则是同步，此线程对象不交给 ‘线程规划器’来进行处理，而是由 main 主线程来调用，必须等run执行完才可以执行后面的代码。
 
-## 四. 线程常用操作
+# 四. 线程常用操作
 
-### 1. 常用方法
+## 1. 常用方法
 
 - getId()方法就是获得线程的唯一标志。
 
@@ -135,7 +132,7 @@ public static void main(String[] args) throws ExecutionException, InterruptedExc
 	守护线程不会阻止 java 虚拟机的终止，当没有用户线程运行的时候，jvm 虚拟机关闭程序并且退
 	出。
 	
-### 2. 中断
+## 2. 中断
 
 一个线程执行完毕之后会自动结束，如果在运行过程中发生异常也会提前结束。
 
@@ -174,14 +171,42 @@ public class InterruptExample {
     }
 }
 ```
+# 五. 线程安全
 
+## 1. 什么是线程安全？
 
-## 五. 互斥同步 Synchronized
+Java语言中各种操作**共享的数据**是分为以下5类：
+
+- 不可变： 不可变的对象一定是线程安全的，无论是对象的方法实现还是方法的调用者，都不需要采取任何的线程安全保障措施。
+
+	- final
+	- String
+
+- 绝对线程安全：当多个线程访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步，或者在调用方进行任何的协调操作，调用这个对象的行为都可以获得正确的结果，那这个对象就是线程安全的。
+
+- 相对线程安全：相对线程安全就是我们通常意义上所讲的线程安全，它需要保证对这个对象单独的操作是线程安全的，我们在调用的时候不需要额外的保障，但是对于特定顺序的连续调用，就可能需要在调用端使用额外的同步手段来保证调用的正确性。
+
+- 线程兼容：对象本身并不是线程安全的，但是可以通过在调用端正确地使用同步手段来保证对象在并发环境中可以安全地使用。
+
+- 线程对立：指调用端无论是否采取了同步措施，都无法在多线程环境中使用的代码。
+
+## 2. 如何实现线程安全？
+
+线程安全的实现方法有以下几种：
+
+### 2.1 互斥同步(阻塞同步）
+
+同步是指多个线程并发访问共享数据时，保证共享数据在同一时刻只被一个（或者是一些，使用信号量的时候）使用，而互斥是实现同步的一种手段。
+
+互斥同步属于一种悲观的并发策略，最主要的问题就是进行线程阻塞和唤醒所带来的性能问题。
 
 Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问，第一个是 JVM 实现的 synchronized，而另一个是 JDK 实现的 ReentrantLock。
 
-### 1. synchronized
-(1) 同步一个方法
+### 2.1.1 synchronized
+
+#### （1）基本使用
+
+**同步一个普通方法**
 
 - 关键字 synchronized 取得的锁是对象锁，作用于同一个对象。哪个线程先执行带 synchronized 关键字的方法，哪个线程就持有该方法所属对象的锁 Lock，其他访问该对象的线程只能等待。如果多个线程访问多个对象，则 JVM 会创建多个锁.
 
@@ -191,37 +216,15 @@ Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问
 
 - 同步不能继承，所以还需在子类的方法中添加 synchronized 关键字
 
-(2) 同步一个代码块
+**同步一个代码块**：和 synchronized 方法一样，synchronized（this) 代码块也是锁定当前对象的
 
-- 和 synchronized 方法一样，synchronized（this) 代码块也是锁定当前对象的
+**同步一个类**：用于整个类，也就是说两个线程调用同一个类的不同对象上的这种同步语句，也会进行同步
 
-(3) 同步一个类
+**同步一个静态方法**：作用于整个类
 
-- 用于整个类，也就是说两个线程调用同一个类的不同对象上的这种同步语句，也会进行同步
+#### （2）线程间通信
 
-(4) 同步一个静态方法
-
-- 作用于整个类
-
-### 2. volatile 关键字在 java 中有什么作用？
-	volatile 的作用是强制从公共堆栈中取得变量的值，而不是从线程私有数据栈中取得变量的值。多线
-	程读取共享变量时可以获取最新值.
-	对于 volatile 修饰的变量， JVM只是保证从主存加载到线程工作内存的值是最新的; 访问
-	volatile变量并不会执行加锁操作，因此不会使执行线程阻塞; volatile 变量解决的是变量在多个
-	线程之间的可见性。
-	
-### 3. 比较 synchronized 和 volatile
-	(1) 关键字 volatile 是线程同步的轻量级实现，volatile 性能更好，volatile 只能用
-		来修饰变量，synchronized 用来修饰方法和代码块;
-	(2) 多线程访问 volatile 不会发生阻塞;
-	(3) volatile 保证数据的可见性，但不保证原子性； synchronized 既可以保证原子性，
-		也可以保证可见性，因为它会将私有内存和公有内存的数据做同步;
-	(4) volatile 解决的是变量在多个线程之间的可见性； 而synchronized 解决的是多个线
-		程之间访问资源的同步性.
-		
-### 4. 线程间通信
-
-**（1） 等待／通知 机制**
+**等待／通知 机制**
 
 - 只能在同步方法或同步块中调用 wait()方法和 notify() 方法，如果没有持有适当的锁，则抛出 IlleagalMonitorStateException
 
@@ -245,21 +248,83 @@ Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问
 	sleep 休眠一定时间后自动唤醒，无参数的 wait 需要其他线程 notify
 	wait 释放锁，sleep 不释放锁
 	
-**（2）方法 join 的使用**
+**方法 join 的使用**
 
-- 方法 join 的作用是使所属的线程对象 x 正常执行 run() 方法中的任务，而使当前线程 z 进行无限期的阻塞，等待线程 x 销毁后再继续执行线程 z 后面的代码
+	方法 join 的作用是使所属的线程对象 x 正常执行 run() 方法中的任务，而使当前线程 z 进行无限期的阻塞，等待线程 x 销毁后再继续
+	执行线程 z 后面的代码
 
-- join 在内部使用 wait() 方法进行等待
+	join 在内部使用 wait() 方法进行等待
 
-- 在join()过程中，如果当前线程对象被中断 interrupt()，则当前线程出现异常
+	在join()过程中，如果当前线程对象被中断 interrupt()，则当前线程出现异常
 
-**(3)类 ThreadLocal 的使用**
- 
-- 类 ThreadLocal 解决的是**变量在不同线程间的隔离性**，也就是不同线程拥有自己的值，不同线程中的值是可以放入 ThreadLocal类中进行保存的
+#### （3）synchronize 和 volatile
 
-- 第一次调用 ThreadLocal 类对象的 get() 方法时返回的值是 null ，可以通过继承 ThreadLocal 类，覆盖 intialValue() 方法赋予初始值
+**volatile 关键字在 java 中有什么作用？**
 
-## 六. 互斥同步 ReentrantlLock 类
+	volatile 的作用是强制从公共堆栈中取得变量的值，而不是从线程私有数据栈中取得变量的值。多线
+	程读取共享变量时可以获取最新值.
+	对于 volatile 修饰的变量， JVM只是保证从主存加载到线程工作内存的值是最新的; 访问
+	volatile变量并不会执行加锁操作，因此不会使执行线程阻塞; volatile 变量解决的是变量在多个
+	线程之间的可见性。
+	
+**比较 synchronized 和 volatile**
+
+	(1) 关键字 volatile 是线程同步的轻量级实现，volatile 性能更好，volatile 只能用
+		来修饰变量，synchronized 用来修饰方法和代码块;
+	(2) 多线程访问 volatile 不会发生阻塞;
+	(3) volatile 保证数据的可见性，但不保证原子性； synchronized 既可以保证原子性，
+		也可以保证可见性，因为它会将私有内存和公有内存的数据做同步;
+	(4) volatile 解决的是变量在多个线程之间的可见性； 而synchronized 解决的是多个线
+		程之间访问资源的同步性.
+		
+#### （4）synchronized 是怎么实现的？
+
+**Java 对象头与 Monitor**
+
+	在JVM中，对象在内存中的布局分为三块区域：对象头、实例数据和对齐填充。
+	
+对象头的结构如图：
+
+![](https://img-blog.csdnimg.cn/20190415164923950.png)
+
+	synchronized的对象锁，锁标识位为10，其中指针指向的是monitor对象（也称为管程或监视器锁）
+	的起始地址。
+	
+	每个对象都存在着一个 monitor 与之关联，当一个 monitor 被某个线程持有后，它便处于锁定状
+	态。
+	
+	在Java虚拟机(HotSpot)中，monitor是由ObjectMonitor实现的。ObjectMonitor中有两个队列，_WaitSet 和 _EntryList，用来保存ObjectWaiter对象列表( 每个等待锁的线程都会被封装成ObjectWaiter对象)，_owner指向持有ObjectMonitor对象的线程，当多个线程同时访问一段同步代码时，首先会进入 _EntryList 集合，当线程获取到对象的monitor 后进入 _Owner 区域并把monitor中的owner变量设置为当前线程同时monitor中的计数器count加1，若线程调用 wait() 方法，将释放当前持有的monitor，owner变量恢复为null，count自减1，同时该线程进入 WaitSe t集合中等待被唤醒。若当前线程执行完毕也将释放monitor(锁)并复位变量的值，以便其他线程进入获取monitor(锁)。	
+**synchronized 代码块底层原理：**
+
+	synchronized语句块的实现使用的是 monitorenter 和 monitorexit 指令。
+	
+	monitorenter 指令指向同步代码块的开始位置，monitorexit指令则指明同步代码块的结束位置。
+	当执行monitorenter指令时，当前线程将试图获取 objectref(即对象锁) 所对应的 monitor 的
+	持有权，当 objectref 的 monitor 的进入计数器为 0，那线程可以成功取得 monitor，并将计数
+	器值设置为 1，取锁成功。如果当前线程已经拥有 objectref 的 monitor 的持有权，那它可以重入
+	这个 monitor，重入时计数器的值也会加 1。倘若其他线程已经拥有 objectref 的 monitor 的所
+	有权，那当前线程将被阻塞，直到正在执行线程执行完毕，即 monitorexit 指令被执行，执行线程将
+	释放 monitor(锁)并设置计数器值为0 ，其他线程将有机会持有 monitor 。
+	
+	值得注意的是编译器将会确保无论方法通过何种方式完成，方法中调用过的每条 monitorenter 指令
+	都有执行其对应 monitorexit 指令，而无论这个方法是正常结束还是异常结束。
+	
+**synchronized 方法底层原理:**
+
+	方法级的同步是隐式，即无需通过字节码指令来控制的，它实现在方法调用和返回操作之中。
+	
+	JVM可以从方法常量池中的方法表结构(method_info Structure) 中的 ACC_SYNCHRONIZED 访问
+	标志区分一个方法是否同步方法。当方法调用时，调用指令将会检查方法的 ACC_SYNCHRONIZED 访问
+	标志是否被设置，如果设置了，执行线程将先持有monitor（虚拟机规范中用的是管程一词）， 然后再
+	执行方法，最后在方法完成(无论是正常完成还是非正常完成)时释放monitor。
+	
+	在方法执行期间，执行线程持有了monitor，其他任何线程都无法再获得同一个monitor。如果一个同
+	步方法执行期间抛出了异常，并且在方法内部无法处理此异常，那这个同步方法所持有的monitor将在异
+	常抛到同步方法之外时自动释放。
+		
+### 2.1.2 ReentrantLock
+
+#### (1) 基本使用
 
 - 关键字 synchronized 与 wait() 和 notify()/notifyAll() 方法相结合可以实现等待／通知模式； 类**ReentrantLock**可以借助 **Condition** 对象实现同样的功能
 
@@ -314,42 +379,33 @@ public void signalAll_B(){
     lock.unlock();
 }
 ```
-- 公平锁与非公平锁
 
-	公平锁：线程获取锁的顺序是按照线程加锁的顺序来分配的 Lock lock = new ReentrantLock(true);
-	非公平锁：抢占机制，随机获得锁. 在默认的情况下，ReentrantLock 类使用的是非公平锁
+#### （2）高级功能
 
-## 七. synchronized 和 ReentrantLock 比较
+相比 synchronized, ReentrantLock 主要增加了以下个高级功能：
 
-### 1. 锁的实现
-	
-	synchronized 是 JVM 实现的，而 ReentrantLock 是 JDK 实现的。
-	
-### 2. 性能
-	
-	新版本 Java 对 synchronized 进行了很多优化，例如自旋锁等。目前来看它和 ReentrantLock 
-	的性能基本持平了，因此性能因素不再是选择 ReentrantLock 的理由。synchronized 有更大的性
-	能优化空间，应该优先考虑 synchronized。
-	
-### 3. 使用选择
+- 等待可中断：当持有锁的线程长期不释放锁的时候，正在等待的线程可以放弃等待，改为处理其他事情。
 
-	除非需要使用 ReentrantLock 的高级功能，否则优先使用 synchronized。这是因为 
-	synchronized 是 JVM 实现的一种锁机制，JVM 原生地支持它，而 ReentrantLock 不是所有的 
-	JDK 版本都支持。并且使用 synchronized 不用担心没有释放锁而导致死锁问题，因为 JVM 会确保
-	锁的释放。ReentrantLock在加锁和解锁处需要通过 lock() 和 unlock() 显示指出。所以一般会
-	在 finally 块中写 unlock() 以防死锁。
+- 可实现公平锁：公平锁是线程获取锁的顺序是按照线程加锁的顺序来分配的 Lock lock = new ReentrantLock(true);非公平锁是抢占机制，随机获得锁. 在默认的情况下，ReentrantLock 类使用的是非公平锁，synchronized 是非公平锁。
 
-### 4. 机制
+- 锁可以绑定多个条件：ReentrantLock 对象可以绑定多个 Condition 对象。
 
-	synchronized 原始采用的是 CPU 悲观锁机制，即线程获得的是独占锁，独占锁是一种悲观锁，共享
-	资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程
+
 	
-	Lock 用的是乐观锁方式。乐观锁实现的机制就是 CAS 操作（Compare and Swap）
-	
-### 5. 悲观锁和乐观锁💕
+### 2.1.3 synchronized 和 ReentrantLock 比较
+
+1. 锁的实现： synchronized 是 JVM 实现的，而 ReentrantLock 是 JDK 实现的。
+
+2. 性能： 新版本 Java 对 synchronized 进行了很多优化，例如自旋锁等。目前来看它和 ReentrantLock 的性能基本持平了，因此性能因素不再是选择 ReentrantLock 的理由。synchronized 有更大的性能优化空间，应该优先考虑 synchronized。
+
+3. 使用选择：除非需要使用 ReentrantLock 的高级功能，否则优先使用 synchronized。这是因为 synchronized 是 JVM 实现的一种锁机制，JVM 原生地支持它，而 ReentrantLock 不是所有的 JDK 版本都支持。并且使用 synchronized 不用担心没有释放锁而导致死锁问题，因为 JVM 会确保锁的释放。ReentrantLock在加锁和解锁处需要通过 lock() 和 unlock() 显示指出。所以一般会在 finally 块中写 unlock() 以防死锁。
+
+4. 机制：synchronized 原始采用的是 CPU 悲观锁机制，即线程获得的是独占锁，独占锁是一种悲观锁，共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程。
+
+**悲观锁和乐观锁💕**
 
 乐观锁对应于生活中乐观的人总是想着事情往好的方向发展，悲观锁对应于生活中悲观的人总是想着事情
-往坏的方向发展。这两种人各有优缺点
+往坏的方向发展。这两种人各有优缺点。
 
 	悲观锁：假定会发生并发冲突，独占锁，屏蔽一切可能违反数据完整性的操作。悲观锁大多数情况下依靠
 	数据库的锁机制实现，以保证操作最大程度的独占性。但随之而来的就是数据库性能的大量开销，特别是
@@ -361,14 +417,34 @@ public void signalAll_B(){
 	增加一个 “version” 字段来实现。读取出数据时，将此版本号一同读出，之后更新时，对此版本号加
 	一。此时，将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如果提交的数据版本号
 	大于数据库表当前版本号，则予以更新，否则认为是过期数据。
-	
-### 6. CAS (Compare And Swap)
+
+### 2.2 非阻塞同步
+
+非阻塞同步属于一种了乐观的并发策略。
+
+#### 2.2.1 CAS (Compare And Swap)
 
 	我是这样理解的，CAS 有三个操作数，内存中的值是 V, 我一直以为的值是 A, 我现在想把它修改成的
 	值 B。 首先我会比较 A 和 V 的值，如果相同，说明没人改过这个值，则直接用 B 覆盖 A；如果不
 	同，说明有人改过这个值，则返回内存中的值 V。
+
+### 2.3 无同步方案
+
+无同步方案就是避免共享数据，天生就是线程安全的。
+
+#### 2.3.1 可重入代码
+
+	如果一个方法，它的结果是可以预测的，只要输入了相同的数据，就都能返回相同的结果，那它就满足可重入性的要求，就是线程安全的。
+
+#### 2.3.2 线程本地存储
+
+**java.lang.ThreadLocal的使用**
+ 
+- 类 ThreadLocal 解决的是**变量在不同线程间的隔离性**，也就是不同线程拥有自己的值，不同线程中的值是可以放入 ThreadLocal类中进行保存的
+
+- 第一次调用 ThreadLocal 类对象的 get() 方法时返回的值是 null ，可以通过继承 ThreadLocal 类，覆盖 intialValue() 方法赋予初始值	
 	
-## 八.  Executor 线程池框架	
+# 六.  Executor 线程池框架
 
 	Executor 管理多个异步任务的执行，而无需程序员显式地管理线程的生命周期。这里的异步是指多个
 	任务的执行互不干扰，不需要进行同步操作。
@@ -390,17 +466,9 @@ public void signalAll_B(){
 
 - 线程池提供定时执行、定期执行、单线程、并发数控制等功能。
 
-## 常见问题
+# 常见问题
 
-### 1. volatile 与 synchronized 的区别
-
-- volatile 轻量级，只能修饰变量。synchronized重量级，还可修饰方法
-
--  volatile 只能保证数据的可见性，不能用来同步，因为多个线程并发访问 volatile 修饰的变量不会阻塞。synchronized 不仅保证可见性，而且还保证原子性，因为，只有获得了锁的线程才能进入临界区，从而保证临界区中的所有语句都全部执行。多个线程争抢 synchronized 锁对象时，会出现阻塞。
-
-**注：**线程安全性包括两个方面，①可见性。②原子性。
-
-### 2.什么是线程池？如果让你设计一个动态大小的线程池，如何设计，应该有哪些方法？线程池创建的方式？
+## 1.什么是线程池？如果让你设计一个动态大小的线程池，如何设计，应该有哪些方法？线程池创建的方式？
 
 **什么是线程池？**
 
@@ -422,22 +490,7 @@ public void signalAll_B(){
 
 	Java 通过 Executors 提供四种线程池。
 	
-### 3. 什么是线程安全？
-
-**定义**
-
-	当多个线程访问同一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替运行，也不需要进行
-	额外的同步，调用这个对象的行为都可以获取正确的结果，那这个对象是线程安全的。
-	
-**如何保证线程安全？**
-
-	方法一：对变量使用 volitate
-	方法二：对程序段进行加锁 (synchronized , lock)
-	
-**锁和 synchronized 为何能保证可见性？**
-
-	一个线程的写结果保证对另外线程的读操作可见，只要该写操作可以由 happens-before 原则推断出
-	在读操作之前发生。
+## 2. 线程安全相关问题
 	
 **既然锁和 synchronized 即可保证原子性也可保证可见性，为何还需要 volatile？**
 
@@ -448,20 +501,8 @@ public void signalAll_B(){
 	synchronized 需要通过操作系统来仲裁谁获得锁，开销比较高，而 AtomicInteger 是通过CPU级
 	的 CAS 操作来保证原子性，开销比较小。所以使用 AtomicInteger 的目的还是为了提高性能。
 	
-**还有没有别的办法保证线程安全？**
-
-	有。尽可能避免引起非线程安全的条件——共享变量。如果能从设计上避免共享变量的使用，即可避免非线
-	程安全的发生
-
-### 4. volatile 关键字如何保证内存可见性？
-
-	volatile 保证可见性的原理是在每次访问变量时都会进行一次刷新，因此每次访问都是主内存中最新
-	的版本。所以 volatile 关键字的作用之一就是保证变量修改的实时可见性。
 	
-	volatile的简单变量如果当前值与该变量以前的值相关，那么 volatile 关键字不起作用，也就是说
-	如下的表达式都不是原子操作：“count++”、“count = count+1”。
-	
-### 5. 如何减少线程上下文切换？
+## 3. 如何减少线程上下文切换？
 
 线程不是越多就越好的，因为线程上下文切换是有性能损耗的
 
@@ -477,7 +518,7 @@ public void signalAll_B(){
 	（4）协程。在单线程里实现多任务的调度，并在单线程里维持多个任务间的切换。协程可以看成是用户
 	    态自管理的“线程”。不会参与CPU时间调度，没有均衡分配到时间。非抢占式的
 	    
-### 6. 线程间通信和进程间通信
+## 4. 线程间通信和进程间通信
 
 **线程间通信：**
 
@@ -505,16 +546,18 @@ public void signalAll_B(){
 
 - 套接口（Socket），可用于不同机器之间的进程间通信
 
-### 7. 并发包(J.U.C)下面，都用过什么？
+## 5. 并发包(J.U.C)下面，都用过什么？
 
 ![](https://img-blog.csdnimg.cn/20190315104742997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
-### 8. 从volatile说到,i++原子操作,线程安全问题
+## 6. 从volatile说到,i++原子操作,线程安全问题
 
 [从volatile说到,i++原子操作,线程安全问题](https://blog.csdn.net/zbw18297786698/article/details/53420780)
 
 
-	
+### 参考资料
+
+- [深入理解Java并发之synchronized实现原理](https://blog.csdn.net/javazejian/article/details/72828483)
 
 
 
