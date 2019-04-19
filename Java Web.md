@@ -1,50 +1,51 @@
-# Java Web
+# Spring 
 
-## Spring 
+Spring 是一站式框架，在 java ee 三层结构中，每一层都提供不同的解决技术：
 
-### IOC
+- Web 层：Spring MVC
+- Service 层：Spring IOC
+- Dao 层：Spring 的 jdbcTemplate
 
-**通俗理解**
+## 一. IOC (Inversion of Control)
 
-- 正常的情况下，比如有一个类，在类里面有方法（不是静态的方法），调用类里面的方法，创建类的对象，使用对象调用方法，创建类对象的过程，需要new出来对象
+### 1. 理解
 
-- 通过控制反转，把对象的创建不是通过new方式实现，而是交给Spring配置创建类对象
+- 正常的情况下，比如有一个类，在类里面有方法（不是静态的方法），调用类里面的方法，创建类的对象，使用对象调用方法，创建类对象的过程，需要new出来对象;
 
-- IOC的意思是控件反转也就是由容器控制程序之间的关系，把控件权交给了外部容器，之前的写法，由程序代码直接操控，而现在控制权由应用代码中转到了外部容器，所以称之为控制反转。换句话说之前用new的方式获取对象，现在由spring给你这个对象。至于怎么给你就是DI（依赖注入）了。
+- 通过控制反转，对象的创建不是通过 new 方式实现的，而是交给 Spring 配置来创建类对象并控制对象的生命周期和对象间的关系；
 
-**Spring IOC实现原理**
+- IOC 的意思是控件反转也就是由容器控制程序之间的关系，把控件权交给了外部容器，之前的写法，由程序代码直接操控，而现在控制权从应用代码中转到了外部容器，所以称之为控制反转。换句话说之前用 new 的方式获取对象，现在由 spring 给你这个对象。至于怎么给你就是DI（依赖注入）了。
 
-初始化：
+### 2. IOC 两种操作方式
 
-![](https://img-blog.csdnimg.cn/20190328105548426.png)
+- ioc的配置文件方式;
+- ioc的注解方式.
 
-- 创建xml配置文件，配置要创建的对象类
-- 通过反射创建实例；
-- 获取需要注入的接口实现类并将其赋值给该接口。
+### 3. IOC 优点
 
-**优点**
+- 解耦合，开发更方便组织分工；
+- 高层不依赖于底层（依赖倒置）；
+- 使应用更容易测试。
 
-- 解耦合，开发更方便组织分工
-- 高层不依赖于底层（依赖倒置）
-- 是应用更容易测试
+### 4. 依赖注入（DI）
 
-**依赖注入（DI）**
+所谓依赖注入，就是把底层类作为参数传入上层类，实现上层类对下层类的控制。DI依赖注入，向类里面属性注入值 ，依赖注入不能单独存在，需要在 IOC 基础上完成操作。
 
-所谓依赖注入，就是把底层类作为参数传入上层类，实现上层类对下层类的控制。DI依赖注入，向类里面属性注入值 ，依赖注入不能单独存在，需要在IOC基础上完成操作。
+### 5. Spring bean 的生命周期
 
-### AOP
+## 二. AOP (Aspect Oriented Programming）
 
-**理解**
+### 1. 理解
 
-- AOP（Aspect Oriented Programming ）称为面向切面编程，面向切面编程（aop）是对面向对象编程（oop）的补充
+- AOP 称为面向切面编程，面向切面编程（aop）是对面向对象编程（oop）的补充
 
 - 在程序开发中主要用来解决一些系统层面上的问题，比如日志，事务，权限等待，Struts2的拦截器设计就是基于AOP的思想，是个比较经典的例子。
 
-**实现原理**
+### 2. 实现原理
 
 - 动态代理（利用反射和动态编译将代理模式变成动态的）
 
-**优点**
+### 3. 优点
 
 - 各个步骤之间的良好隔离性
 - 源代码无关性
@@ -53,21 +54,13 @@
 - 代码复用
 
 
-## Spring MVC
+## 三. Spring MVC
 
-**工作原理**
+### 1. 工作流程
 
 ![](https://img-blog.csdnimg.cn/20190328110748721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
-## Hibernate
-
-	hibernate 是一个数据持久层的框架,只管 怎么去访问及操作数据库的数据.
-## Mybatis
-
-
-## 常见问题
-
-### Spring & Spring MVC & Spring Boot
+## 四. Spring & Spring MVC & Spring Boot
 
 Spring 是一个轻量级的 java 开发框架，它的核心是控制反转（IOC）和面向切面（AOP）,针对于开发的WEB层(springMvc)、业务层(Ioc)、持久层(jdbcTemplate)等都提供了多种配置解决方案；
 
@@ -83,6 +76,15 @@ Spring boot 具有以下特性：
 - 整合常用依赖（开发库，例如spring-webmvc、jackson-json、validation-api和tomcat等），提供的POM可以简化Maven的配置。当我们引入核心依赖时，SpringBoot会自动引入其他依赖。
 
 - 内嵌了Tomcat等容器，可以直接跑起来，用不着再做部署工作了；
+
+
+
+# Hibernate
+
+	hibernate 是一个数据持久层的框架,只管怎么去访问及操作数据库的数据.
+	
+# Mybatis
+
 
 ### Hibernate vs Mybatis
 

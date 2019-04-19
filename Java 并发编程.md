@@ -424,9 +424,10 @@ public void signalAll_B(){
 
 #### 2.2.1 CAS (Compare And Swap)
 
-	我是这样理解的，CAS 有三个操作数，内存中的值是 V, 我一直以为的值是 A, 我现在想把它修改成的
-	值 B。 首先我会比较 A 和 V 的值，如果相同，说明没人改过这个值，则直接用 B 覆盖 A；如果不
-	同，说明有人改过这个值，则返回内存中的值 V。
+![](https://img-blog.csdn.net/20170701155737036?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamF2YXplamlhbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+	CAS 有三个操作数，内存中的值是 V, 我一直以为的值是 E, 我现在想把它修改成的值 N。首先我会比较 E 和 V 的值，如果相同，说明没
+	人改过这个值，则直接用 N 覆盖 V；如果不同，说明有人改过这个值，则返回内存中的值 V。
 
 ### 2.3 无同步方案
 

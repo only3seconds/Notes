@@ -13,14 +13,13 @@
 
 #### 概览
 
-	基于动态数组实现,数组的默认大小为 10实现了 RandomAccess 接口, 支持随机访问;
+	基于动态数组实现,数组的默认大小为 10实现了 RandomAccess 接口, 支持随机访问.
 	
 #### 序列化
 
-	ArrayList 具有动态扩容特性, 保存元素的数组使用 transient 修饰，声明数组默认不会被序列
-	化，因为这个数组是动态扩展的，并不是所有的空间都被使用，因此就不需要所有的内容都被序列化。
-	ArrayList 重写了 writeObject() 和 readObject() 来控制只序列化数组中有元素填充那
-	部分内容。
+	ArrayList 具有动态扩容特性, 保存元素的数组使用 transient 修饰，声明数组默认不会被序列化，因为这个数组是动态扩展的，并不
+	是所有的空间都被使用，因此就不需要所有的内容都被序列化。ArrayList 重写了 writeObject() 和 readObject() 来控制只序列
+	化数组中有元素填充那部分内容。
 	
 #### 扩容
 
@@ -35,14 +34,13 @@
 	
 #### Fail-Fast
 
-	fail-fast 机制在遍历一个集合时，当集合结构被修改，会抛出 Concurrent Modification
+	fail-fast 机制在遍历一个集合时，当集合结构被修改，会抛出 Concurrent Modification Exception。
+	
+	modCount 用来记录 ArrayList 结构发生变化的次数。结构发生变化是指添加或者删除至少一个元素的所有操作，或者是调整内部数组的
+	大小，仅仅只是设置元素的值不算结构发生变化。
+	
+	在进行序列化或者迭代等操作时，需要比较操作前后 modCount 是否改变，如果改变了需要抛出 Concurrent Modification 
 	Exception。
-	
-	modCount 用来记录 ArrayList 结构发生变化的次数。结构发生变化是指添加或者删除至少一个元
-	素的所有操作，或者是调整内部数组的大小，仅仅只是设置元素的值不算结构发生变化。
-	
-	在进行序列化或者迭代等操作时，需要比较操作前后 modCount 是否改变，如果改变了需要抛出 
-	Concurrent Modification Exception。
 	
 	sremove() 方法会让 expectModcount 和 modcount 相等，所以是不会抛出这个异常。
 	
@@ -61,7 +59,7 @@
 	
 #### Vector 替代方案
 
-- 方案一：为了获得线程安全的 ArrayList，可以使用 Collections.synchronizedList(); 得到一个线程安全的 ArrayList。
+- 方案一：为了获得线程安全的 ArrayList，可以使用 Collections.synchronizedList((new ArrayList<>()); 得到一个线程安全的 ArrayList。
 
 ```java
 List<String> list = new ArrayList<>();
@@ -79,17 +77,16 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 	LinkedList 底层是基于双向链表实现的。
 	
-	LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以
-	看作一个队列（Queue），同时又可以看作一个栈（Stack）。
+	LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以看作一个队列（Queue），同时又可
+	以看作一个栈（Stack）。
 	
-	当你需要使用栈或者队列时，可以考虑使用 LinkedList ，一方面是因为 Java 官方已经声明不建议
-	使用 Stack 类，更遗憾的是，Java里根本没有一个叫做 Queue 的类（它是个接口名字）。
+	当你需要使用栈或者队列时，可以考虑使用 LinkedList ，一方面是因为 Java 官方已经声明不建议使用 Stack 类，更遗憾的是，
+	Java里根本没有一个叫做 Queue 的类（它是个接口名字）。
 	
-	关于栈或队列，现在的首选是 ArrayDeque，它有着比 LinkedList （当作栈或队列使用时）有着更
-	好的性能。
+	关于栈或队列，现在的首选是 ArrayDeque，它有着比 LinkedList （当作栈或队列使用时）有着更好的性能。
 	
-	LinkedList没有实现同步（synchronized），如果需要多个线程并发访问，可以先采用 
-	Collections.synchronizedList() 方法对其进行包装。
+	LinkedList没有实现同步（synchronized），如果需要多个线程并发访问，可以先采用 Collections.synchronizedList() 方法
+	对其进行包装。
 	
 #### add()
 
@@ -107,8 +104,8 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 #### get()
 
-	使用二分查找来看 index 离 size 中间距离来判断是从头结点正序查还是从尾节点倒序查。
-	这样的效率是非常低的，特别是当 index 越接近 size 的中间值时。
+	使用二分查找来看 index 离 size 中间距离来判断是从头结点正序查还是从尾节点倒序查。这样的效率是非常低的，特别是当 index 越
+	接近 size 的中间值时。
 	
 #### ArrayList 和 LinkedList
 
@@ -120,12 +117,11 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 ### 1. HashSet
 
-	HashSet 对 HashMap 进行了一次包装，HashSet 里面有一个 HashMap（适配器模式），对
-	HashSet 的函数调用都会转换成合适的 HashMap 方法
+	HashSet 对 HashMap 进行了一次包装，HashSet 里面有一个 HashMap（适配器模式），对HashSet 的函数调用都会转换成合适的
+	HashMap 方法;
 	
-	add() 方法，将存放的对象当做了 HashMap 的健，value 都是相同的 PRESENT 。由于
-	HashMap 的 key 是不能重复的，所以每当有重复的值写入到 HashSet 时，value 会被覆盖，但 
-	key 不会收到影响，这样就保证了 HashSet 中只能存放不重复的元素。
+	add() 方法，将存放的对象当做了 HashMap 的健，value 都是相同的 PRESENT 。由于HashMap 的 key 是不能重复的，所以每当有
+	重复的值写入到 HashSet 时，value 会被覆盖，但 key 不会收到影响，这样就保证了 HashSet 中只能存放不重复的元素。
 	
 - 基于哈希实现，支持快速查找，O(1)
 - 失去了元素的插入顺序信息
@@ -157,9 +153,8 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 ![](https://img-blog.csdnimg.cn/20190313213409336.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
-	不同的 key 经过 hash 运算可能会得到相同的地址，采用链地址法以后，如果遇到相同的 hash 值
-	的key 的时候，可以将它放到作为数组元素的链表上。取元素的时候通过 hash 运算的结果找到这个
-	链表，再在链表中找到与 key 相同的节点，就能找到 key 相应的值了。
+	不同的 key 经过 hash 运算可能会得到相同的地址，采用链地址法以后，如果遇到相同的 hash 值的 key 的时候，可以将它放到作为数
+	组元素的链表上。取元素的时候通过 hash 运算的结果找到这个链表，再在链表中找到与 key 相同的节点，就能找到 key 相应的值了。
 	
 #### (2) Java8 存储结构
 
@@ -173,13 +168,11 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 ![](https://img-blog.csdnimg.cn/20190304170933672.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
-####（3）Java7 put过程
+#### (3) Java7 put过程
 
 - 数组初始化： 插入第一个元素的时候做一次数组的初始化，确定初始的数组大小，并计算数组扩容的阈值。
 - 求 key 的 hash 值， 找到对应的数组下标
-- 添加节点到链表中： 先判断是否需要扩容，需要的话先扩容，然后再将这个新的数据插入到扩容后
-的数组的相应位置处的链表的表头。扩容就是用一个新的大数组替换原来的小数组，并将原来数组中的值
-迁移到新的数组中。
+- 添加节点到链表中： 先判断是否需要扩容，需要的话先扩容，然后再将这个新的数据插入到扩容后的数组的相应位置处的链表的表头。扩容就是用一个新的大数组替换原来的小数组，并将原来数组中的值迁移到新的数组中。
 
 #### (4) Java8 put过程
 
@@ -197,15 +190,13 @@ List<String> list = new CopyOnWriteArrayList<>();
 #### (6) Java8 get 过程
 
 	（1）计算 key 的 hash 值，根据 hash 值找到对应数组下标
-	（2）判断该元素类型是否是 TreeNode，如果是，用红黑树的方法取数据，如果不是，遍历链表，直
-	    到找到相等(==或equals)的 key.
+	（2）判断该元素类型是否是 TreeNode，如果是，用红黑树的方法取数据，如果不是，遍历链表，直到找到相等(==或equals)的 key.
 	    
 #### （7）线程安全性
 
-	在多线程使用场景中，应该尽量避免使用线程不安全的 HashMap，而使用线程安全的 
-	ConcurrentHashMap。那么为什么说 HashMap 是线程不安全的，在并发环境下，可能会形成环状
-	链表（扩容时可能造成），导致 get 操作时，cpu 空转，所以，在并发环境中使 用HashMap 是非
-	常危险的。
+	在多线程使用场景中，应该尽量避免使用线程不安全的 HashMap，而使用线程安全的 ConcurrentHashMap。那么为什么说 HashMap 是
+	线程不安全的，在并发环境下，可能会形成环状链表（扩容时可能造成），导致 get 操作时，cpu 空转，所以，在并发环境中使用
+	HashMap 是非常危险的。
 
 	
 ### 2. ConcurrentHashMap
@@ -216,41 +207,40 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 **分段锁**
 
-- 整个 ConcurrentHashMap 由一个个 Segment 组成，Segment 通过继承 ReentrantLock 来进行加锁
-- 每个 Segment 是线程安全的 HashMap。一个 ConcurrentHashMap 维护一个 Segment 数组，一个 Segment 维护一个 HashEntry 数组。
-- 每次需要加锁的操作锁住的是一个 segment，只要保证每个 Segment 是线程安全的，也就实现了全局的线程安全
+- 整个 ConcurrentHashMap 由一个个 Segment 组成，Segment 通过继承 ReentrantLock 来进行加锁；
+- 每个 Segment 是线程安全的 HashMap。一个 ConcurrentHashMap 维护一个 Segment 数组，一个 Segment 维护一个 HashEntry 数组；
+- 每次需要加锁的操作锁住的是一个 segment，只要保证每个 Segment 是线程安全的，也就实现了全局的线程安全；
 - concurrencyLevel：segment 数，一旦初始化以后，不可以扩容，默认为16.
 
 **put 过程**
 
-	（1）根据 hash 值找到相应的 segment
-	（2）获取该 segment 的独占锁
-	（3）添加节点
+	（1）根据 hash 值找到相应的 segment；
+	（2）获取该 segment 的独占锁；
+	（3）添加节点。
 	
 **get 过程**
 
-	（1）计算 hash 值，定位 segment 
-	（2）根据 hash 找到 segment 中具体位置
-	（3）到这里是链表了，顺着链表进行查找
+	（1）计算 hash 值，定位 segment；
+	（2）根据 hash 找到 segment 中具体位置；
+	（3）到这里是链表了，顺着链表进行查找。
 	
 - get 操作的高效之处在于整个 get 过程不需要加锁，除非读到的值是空的才会加锁重读。get 方法里将要使用的共享变量都定义成 volatile.
 	
-**size操作**
+**size 操作**
 
-	每个 Segment 维护了一个 count 变量来统计该 Segment 中的键值对个数。在执行 size 操作
-	时，需要遍历所有 Segment 然后把 count 累计起来。
+	每个 Segment 维护了一个 count 变量来统计该 Segment 中的键值对个数。在执行 size 操作时，需要遍历所有 Segment 然后把 
+	count 累计起来。
 	
-	ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两次不加锁操作得到的结果一
-	致，那么可以认为这个结果是正确的。尝试次数使用 RETRIES_BEFORE_LOCK 定义，该值为 2，
-	retries 初始值为 -1，因此尝试次数为 3。如果尝试的次数超过 3 次，就需要对每个 Segment
-	加锁。
+	ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两次不加锁操作得到的结果一致，那么可以认为这个结果是正确的。
+	尝试次数使用 RETRIES_BEFORE_LOCK 定义，该值为 2，retries 初始值为 -1，因此尝试次数为 3。如果尝试的次数超过 3 次，就
+	需要对每个 Segment 加锁。
 
-**Java8 改进**
+**Java 8 改进**
 
-	1. 结构上和 java7 HashMap 基本一样，链表过长时会转换为红黑树。
+	1. 结构上和 java7 HashMap 基本一样，链表过长时会转换为红黑树；
 	
-	2. JDK 1.8 的实现不是用了 Segment，Segment 属于重入锁 ReentrantLock。JDK 1.8 使
-	   用了 CAS 操作来支持更高的并发度，在 CAS 操作失败时使用内置锁 synchronized。
+	2. JDK 1.8 的实现不是用了 Segment，Segment 属于重入锁 ReentrantLock。JDK 1.8 使用了 CAS 操作来支持更高的并发度，
+	   在 CAS 操作失败时使用内置锁 synchronized；
 	   
 	3. synchronized 的好处：
 		（1）synchronized 的锁粒度更低；
@@ -262,19 +252,18 @@ List<String> list = new CopyOnWriteArrayList<>();
 
 ![](https://img-blog.csdnimg.cn/20190314113100155.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
-	 LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap
-	 的基础上，采用双向链表的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序
-	 相同。
+	 LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表的形式将所有 
+	 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。
 	 
-	 迭代 LinkedHashMap 时不需要像 HashMap 那样遍历整个table，而只需要直接遍历 header
-	 指向的双向链表即可，也就是说 LinkedHashMap 的迭代时间就只跟entry的个数相关，而跟
-	 table的大小无关。
+	 迭代 LinkedHashMap 时不需要像 HashMap 那样遍历整个table，而只需要直接遍历 header 指向的双向链表即可，也就是说
+	 LinkedHashMap 的迭代时间就只跟entry的个数相关，而跟table的大小无关。
+	 
 - 使用链表来维护元素的顺序，顺序为插入顺序或者最近最少使用（LRU）顺序
 
 **put()**
 
-	从 table 的角度看，新的 entry 需要插入到对应的 bucket 里，当有哈希冲突时，采用头插法将
-	新的 entry 插入到冲突链表的头部。
+	从 table 的角度看，新的 entry 需要插入到对应的 bucket 里，当有哈希冲突时，采用头插法将新的 entry 插入到冲突链表的头
+	部。
 	
 	从 header 的角度看，新的 entry 需要插入到双向链表的尾部。
 

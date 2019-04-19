@@ -1,8 +1,6 @@
-# Java 基础
+# 一. 基本概念
 
-## 一. 基本概念
-
-### 1. java 程序初始化
+## 1. java 程序初始化
 
 	1. 初始化：即使变量分布于方法的不同地方，也会先于方法（包括构造方法）初始化。
 	2. 加载顺序：
@@ -13,7 +11,7 @@
 		（5）子类（普通变量、普通语句块）
 		（6）子类（构造函数）
 		
-### 2. Java 和 C++ 的区别？
+## 2. Java 和 C++ 的区别？
 
 - java 面向对象，C++既支持面向对象也支持面向过程；
 - Java 跨平台，C++依赖于特定的平台；
@@ -23,9 +21,9 @@
 - Java goto是保留字，不能使用，C++可以使用goto；
 - Java 不支持条件编译， C++支持条件编译
 
-### 3. Java 反射
+## 3. Java 反射
 
-#### （1）. 什么是反射？
+### （1）. 什么是反射？
 
 	反射的意思是运行中的 java 程序可以获取自身的信息，可以操作类和对象的内部属性。
 	反射的核心是 JVM 在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译
@@ -38,7 +36,7 @@ Java 反射框架主要提供以下功能：
 -  在运行时判断任意一个类所具有的成员变量和方法；
 -  在运行时调用任意一个对象的方法。
 	
-#### （2）. 反射的应用。
+### （2）. 反射的应用。
 反射最重要的用途就是开发各种通用框架。
 
 	　很多框架（比如 Spring ）都是配置化的（比如通过 XML 文件配置 JavaBean,Action 之类
@@ -47,15 +45,15 @@ Java 反射框架主要提供以下功能：
 	　
 要获取类方法和字段的注解信息，必须通过 Java 的反射技术来获取 Annotation 对象，因为你除此之外没有别的获取注解对象的方法。
 
-#### （3）. 如何获得 Class 对象？
+### （3）. 如何获得 Class 对象？
 
 - 调用运行时类本身的 .class 属性；
 - 通过运行时类的对象获取 getClass();
 - 使用 Class 类的 forName 静态方法。（在JDBC开发中常用此方法加载数据库驱动）
 
-### 4. 注解
+## 4. 注解
 
-#### （1）什么是注解？
+### （1）什么是注解？
 
 	注解如同一张标签。用来将任何的信息或元数据（metadata）与程序元素（类、方法、成员变量等）进
 	行关联。为程序的元素（类、方法、成员变量）加上更直观更明了的说明，这些说明信息是与程序的业务
@@ -64,12 +62,12 @@ Java 反射框架主要提供以下功能：
 	简单来说：注解其实就是代码中的特殊标记，这些标记可以在编译、类加载、运行时被读取，并执行相对
 	应的处理。
 	
-#### (2) 为什么要用注解？
+### (2) 为什么要用注解？
 
 	传统的方式，我们是通过配置文件 .xml 来告诉类是如何运行的。有了注解技术以后，我们就可以通过
 	注解告诉类如何运行。
 	
-#### （3）Java 预置的注解
+###（3）Java 预置的注解
 
 -  @Override
 
@@ -106,26 +104,26 @@ public class safe {
 }  
 ```
 
-- 5. @FunctionalInterface
+- @FunctionalInterface
 
 函数式接口注解，Java 1.8 版本引入的新特性。函数式接口 (Functional Interface) 就是一个具有一个方法的普通接口。
 
-### 5. 泛型
+## 5. 泛型
 
 通俗的讲，泛型就是操作类型的 占位符
 
-### 6. 访问修饰符
+## 6. 访问修饰符
 ![](https://img-blog.csdnimg.cn/20190313154300136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
-### 7. 深拷贝与浅拷贝
+## 7. 深拷贝与浅拷贝
 
 - 深拷贝：对基本数据类型进行值传递，对引用数据类型，创建一个新的对象，并复制其内容。
 - 浅拷贝：浅拷贝仅仅复制所拷贝的对象，而不复制它所引用的对象。
 
-### 8. Lamda表达式
+## 8. Lamda表达式
 lambda 表达式只能引用标记了 final 的外层局部变量，这就是说不能在 lambda 内部修改定义在域外的局部变量，否则会编译错误。
 
-### 9. 字符串常量池
+## 9. 字符串常量池
 
 	Java 中字符串对象创建有两种形式，一种为字面量形式，如 String str = "abc";，另一种就是使
 	用 new 这种标准的构造对象的方法，如 String str = new String("abc");这两种实现其实存在
@@ -138,9 +136,9 @@ lambda 表达式只能引用标记了 final 的外层局部变量，这就是说
 	字符串的比较不可以使用==,这样会比较内存地址，字符串比较应当用equals,可见String重写了
 	equals 方法。
 
-## 二. 面向对象
+# 二. 面向对象
 
-### Java的四个基本特性，对多态的理解，在项目中哪些地方用到多态
+## 1. Java的四个基本特性，对多态的理解，在项目中哪些地方用到多态
 
 	在我理解,面向对象是一种“万物皆对象”的编程思想。在现实生活中的任何物体都可以归为一类事物，而
 	每一个个体都是一类事物的实例。面向对象的编程是以对象为中心，以消息为驱动。
@@ -199,30 +197,30 @@ lambda 表达式只能引用标记了 final 的外层局部变量，这就是说
 		接口：在接口的多态中，指向接口的引用必须是指定实现了该接口的一个类的实例，在运行时，根
 		据对象引用的实际类型来执行对应的方法。
 		
-### 内部类
+## 2. 内部类
 
-### 组合、继承和代理的区别
+## 3. 组合、继承和代理的区别
 
-### 什么是构造函数
+## 4. 什么是构造函数
 
-### 向上造型和向下造型
+## 5.  向上造型和向下造型
 
-## 三. 关键字
+# 三. 关键字
 
-### final 关键字
+## 1. final 关键字
 
 	final 关键字的含义是终态的，无法改变的。
 	final 修饰变量表示常量，只能被赋值一次，赋值后不能被改变。
 	final 修饰的方法可以被继承，但是不能被子类覆盖。
 	final 修饰的类不能被继承，没有子类，final 类的所有方法都是 final 的。
 	
-### static 关键字
+## 2. static 关键字
 
 	被 static 修饰的成员变量和成员方法独立于该类的任何对象。也就是说，它不依赖于类的特定的实
 	例，被类的所有实例共享，可以直接通过类名来访问它。
 	静态的不能访问非静态的，因为类加载时， static 修饰的变量会被加载到方法区。
 	
-### volatile 关键字
+## 3. volatile 关键字
 
 	volatile 是一个类型修饰符，它是被设计用来修饰被不同线程访问和修改的变量。在使用 volatile
 	修饰成员变量后，所有线程在任何时间所看到变量的值都是相同的。此外，使用 volatile 会阻止编译
@@ -232,20 +230,20 @@ lambda 表达式只能引用标记了 final 的外层局部变量，这就是说
 	每次访问变量时，总是获取主内存的最新值
 	每次修改变量后，立刻写回到主内存中
 	
-### assert 断言 
+## 4. assert 断言 
 
-### instanceof
+## 5. instanceof
 
-### transient
+## 6. transient
 
 	Java 的 transient 关键字为我们提供了便利，你只需要实现 Serilizable 接口，将不需要序列
 	化的属性前添加关键字 transient，序列化对象的时候，这个属性就不会序列化到指定的目的地中。
 
-###  native
+## 7. native
 
-## 四. 基本数据类型与运算
+# 四. 基本数据类型与运算
 
-### Java 的基本数据类型、引用类型、自动装箱和拆箱
+## 1. Java 的基本数据类型、引用类型、自动装箱和拆箱
 
 基本数据类型：
 
@@ -261,11 +259,11 @@ lambda 表达式只能引用标记了 final 的外层局部变量，这就是说
 	装箱：从基本数据类型到封装类型叫做装箱
 	拆箱：从封装类型到基本数据类型叫拆箱
 
-### ValueOf缓存池
+## 2. ValueOf缓存池
 
-###  i++和++i有什么区别
+## 3. i++和++i有什么区别
 
-### 位运算符
+## 4. 位运算符
 
 **不用额外变量交换两个整数的值**
 
@@ -285,11 +283,11 @@ lambda 表达式只能引用标记了 final 的外层局部变量，这就是说
 	|| 和 | 都是表示 “或”，区别是 || 只要满足第一个条件，后面的条件就不再判断，而 | 要对所有
 	的条件进行判断。
 
-###  原码、补码、反码
+## 5. 原码、补码、反码
 
-## 五. 字符串与数组
+# 五. 字符串与数组
 
-### String 不变性
+## 1. String 不变性
 
 	一旦一个 String 对象在内存中创建，它将是不可改变的，所有的 String 类中方法并不是改变
 	String 对象自己，而是重新创建一个新的 String 对象。
@@ -298,7 +296,7 @@ lambda 表达式只能引用标记了 final 的外层局部变量，这就是说
 - 在用 + 号链接字符串的时候会创建新的字符串
 - String s = new String("Hello world"); 可能创建两个对象也可能创建一个对象。如果静态区中有 “Hello world” 字符串常量对象的话，则仅仅在堆中创建一个对象。如果静态区中没有 “Hello world” 对象，则堆上和静态区中都需要创建对象。
 
-### String 有重写 Object 的 hashcode 和 equals 吗？如果重写 equals 不重写 hashcode 会出现什么问题？
+## 2. String 有重写 Object 的 hashcode 和 equals 吗？如果重写 equals 不重写 hashcode 会出现什么问题？
 
 ```
 1. String 重写了 Object 类的 hashcode 和 equals 方法。
@@ -316,7 +314,7 @@ object1.hashCode() == object2.hashCode() 为 true时，但 object1.euqal(object2
 
 	需要重写 equals 方法和 hashcode，必须保证对象的属性改变时，其 hashcode 不能改变。
 
-### String & StringBuffer & StringBuilder
+## 3. String & StringBuffer & StringBuilder
 
 - 都是 final 类，都不允许被继承
 - String 长度是不可变的，StringBuffer、StringBuilder 长度是可变的
@@ -324,20 +322,20 @@ object1.hashCode() == object2.hashCode() 为 true时，但 object1.euqal(object2
 - StringBuilder 比 StringBuffer 更快
 - 如果一个 String 类型的字符串，在编译时就可以确定是一个字符串常量，则编译完成之后，字符串会自动拼接成一个常量。此时 String 的速度比 StringBuffer 和 StringBuilder 的性能好的多
 
-## 六. 异常处理
+# 六. 异常处理
 
 [Java异常](https://blog.csdn.net/journey_TripleP/article/details/80068083)
 
-## 七. Object 通用方法
+# 七. Object 通用方法
 
-### 1.public final native Class<?> getClass()
+## 1.public final native Class<?> getClass()
 	getClass方法用于获得一个对象的类型类
 	
-### 2.public String toString()
+## 2.public String toString()
 	默认返回 ToStringExample@4554617c 这种形式，其中 @ 后面的数值为散列码的无符号十六进制
 	表示。
 	
-### 3.public boolean equals(Object obj)
+## 3.public boolean equals(Object obj)
 	equals 与 == 的区别
 	对于==方法，如果作用于基本数据类型的变量，则直接比较其存储的 “值”是否相等；如果作用于引用
 	类型的变量，则比较的是所指向的对象的地址是否相同，即是否指向同一个对象；
@@ -345,26 +343,26 @@ object1.hashCode() == object2.hashCode() 为 true时，但 object1.euqal(object2
 	写，则比较的是引用类型的变量所指向的对象的地址是否相同；诸如String、Date等类对equals方法
 	进行了重写的话，比较的是所指向的对象的内容是否相同。
 
-### 4.public native int hashCode()
+## 4.public native int hashCode()
 	(1) hasCode() 返回散列值，而 equals() 是用来判断两个实例是否等价。等价的两个实例散列值
 	定要相同，但是散列值相同的两个实例不一定等价。
 	(2) 在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证等价的两个实例散列值也相等
 	
-### 5.void wait()
+## 5.void wait()
 	使当前执行代码的线程进行等待，直到接到通知或者被中断。每个锁对象都有两个队列，分别是就绪队列
 	和阻塞队列，一个线程被 wait 后就会进入阻塞队列。
 	wait()方法执行后立即释放锁。
 	wait(long) 等待某一时间内是否有线程对锁进行唤醒，如果超过这个时间则自动唤醒。
 		
-### 6.void notify()
+## 6.void notify()
 	随机唤醒在此对象监视器上等待的单个线程。 
 	当方法notify()被执行后，锁不自动释放，必须执行完notify（）所在的synchronized代码块后才
 	释放锁
 	
-### 7.void notifyAll()
+## 7.void notifyAll()
 	唤醒在此对象监视器上等待的所有线程。
 	
-### 8.protected Object clone()
+## 8.protected Object clone()
 	创建并返回此对象的一个副本。（可以实现对一个非基本数据类型的对象进行复制，但不能影响到原对
 	象). clone() 是 Object 的受保护方法，这意味着，如果一个类不显式去覆盖 clone() 就没有这	个方法。
 	
@@ -373,3 +371,52 @@ object1.hashCode() == object2.hashCode() 为 true时，但 object1.euqal(object2
 	
 	使用 clone() 方法来拷贝一个对象即复杂又有风险，它会抛出异常，并且还需要类型转换。最好不要
 	去使用 clone()，可以使用拷贝构造函数或者拷贝工厂来拷贝一个对象。
+	
+# 七. JDK 不同版本
+
+## 1. jdk1.7 新特性：
+
+- switch 中可以使用字符串
+- 对集合类的语言支持，存取元素变得方便
+
+```java
+
+// 原本需要这样： 
+         List<String> list = new ArrayList<String>(); 
+         list.add("item"); 
+         String item = list.get(0); 
+   
+         Set<String> set = new HashSet<String>(); 
+         set.add("item"); 
+         Map<String, Integer> map = new HashMap<String, Integer>(); 
+         map.put("key", 1); 
+         int value = map.get("key"); 
+// 现在你可以这样： 
+         List<String> list = ["item"]; 
+         String item = list[0]; 
+         
+         Set<String> set = {"item"}; 
+         
+         Map<String, Integer> map = {"key" : 1}; 
+         int value = map["key"]; 
+```
+
+## 2. jdk1.8 新特性：
+
+- HashMap 中链长度大于8时采用红黑树结构存储，因为红黑树除了添加的情况外，其他时候效率比链表高。
+- ConcurrentHashMap:底层采用node数组+链表+红黑树的存储结构，通过CAS算法(乐观锁机制)+synchronized来保证并发安全的实现。
+- 接口中可以有默认方法与静态方法，也就是接口中可以有实现方法. 默认方法中的default不可省略，子类重写时候，必须去掉default修饰符
+- Lambda 表达式: 是对匿名比较器的简化
+
+## 3. jdk1.9 新特性：
+
+- 在1.8的基础上又增加了接口的私有方法和私有静态方法
+- G1是Java 9中的默认GC
+
+## 4. jdk1.10 新特性：
+
+- 局部变量类型推断:局部变量类型推断将引入"var"关键字，也就是你可以随意定义变量而不必指定变量的类型.
+- GC改进和内存管理
+
+	JDK 10中有2个JEP专门用于改进当前的垃圾收集元素。第一个垃圾收集器接口是（JEP 304），它将引入一个纯净的垃圾收集器接口，以帮助改进不同垃圾收集器的源代码隔离。预定用于Java 10的第二个JEP是针对G1的并行完全GC（JEP 307），其重点在于通过完全GC并行来改善G1最坏情况的等待时间。G1是Java 9中的默认GC，并且此JEP的目标是使G1平行。
+
