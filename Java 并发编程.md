@@ -206,63 +206,62 @@ Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问
 
 #### （1）基本使用
 
-**同步一个普通方法**
+**修饰实例方法**：关键字 synchronized 修饰实例方法取得的锁是对象锁，作用于同一个对象。一个对象只有一把对象锁。
 
-- 关键字 synchronized 取得的锁是对象锁，作用于同一个对象。哪个线程先执行带 synchronized 关键字的方法，哪个线程就持有该方法所属对象的锁 Lock，其他访问该对象的线程只能等待。如果多个线程访问多个对象，则 JVM 会创建多个锁.
+**修饰静态方法**：关键字 synchronized 修饰静态方法取得的锁是类锁（Class对象锁），作用于整个类。一个类只有一把Class对象锁。
 
-- 在一个 synchronized 方法／块的内部调用本类的其他 synchronized 方法／块时，是永远可以得到的; 子类是完全可以通过 ‘可重入锁’ 调用父类的同步方法的
+**修饰代码块**：synchronized（this) 代码块是锁定当前对象的；synchronized（类.Class) 代码块是锁定类的；synchronized（instance) 代码块锁定某个对象锁。
 
-- 出现异常，锁自动释放
+#### （2）注意点
 
-- 同步不能继承，所以还需在子类的方法中添加 synchronized 关键字
+- 在一个 synchronized 方法／块的内部调用本类的其他 synchronized 方法／块时，是永远可以得到的; 子类是完全可以通过 ‘可重入锁’ 调用父类的同步方法的；
 
-**同步一个代码块**：和 synchronized 方法一样，synchronized（this) 代码块也是锁定当前对象的
+- 出现异常，synchronized 锁自动释放;
 
-**同步一个类**：用于整个类，也就是说两个线程调用同一个类的不同对象上的这种同步语句，也会进行同步
+- 同步不能继承，所以还需在子类的方法中添加 synchronized 关键字。
 
-**同步一个静态方法**：作用于整个类
-
-#### （2）线程间通信
+#### （3）线程间通信
 
 **等待／通知 机制**
 
-- 只能在同步方法或同步块中调用 wait()方法和 notify() 方法，如果没有持有适当的锁，则抛出 IlleagalMonitorStateException
+- 只能在同步方法或同步块中调用 wait()方法和 notify() 方法，如果没有持有适当的锁，则抛出 IlleagalMonitorStateException；
 
-- wait 使线程停止运行，而 notify 使停止的线程继续运行
+- wait 使线程停止运行，而 notify 使停止的线程继续运行；
 
-- 每个锁对象都有两个队列，分别是就绪队列和阻塞队列，一个线程被 wait 后就会进入阻塞队列
+- 每个锁对象都有两个队列，分别是就绪队列和阻塞队列，一个线程被 wait 后就会进入阻塞队列；
 
-- 当方法 wait() 被执行后，锁被自动释放; 当方法 notify()被执行后，锁不自动释放，必须执行完 notify()方法所在的 synchronized 同步代码块后才释放锁
+- 当方法 wait() 被执行后，锁被自动释放; 当方法 notify()被执行后，锁不自动释放，必须执行完 notify()方法所在的 synchronized 同步代码块后才释放锁；
 
-- sleep()方法不释放锁
+- sleep()方法不释放锁；
 
-- 当线程呈 wait()状态时，调用线程对象的 interrupt()方法会出现 InterruptedException 异常
+- 当线程呈 wait()状态时，调用线程对象的 interrupt()方法会出现 InterruptedException 异常；
 
-- 调用 notify()方法一次只能随机通知一个线程进行唤醒，notifyAll() 可以唤醒全部线程
+- 调用 notify()方法一次只能随机通知一个线程进行唤醒，notifyAll() 可以唤醒全部线程；
 
-- wait(long) 等待某一时间内是否有线程对锁进行唤醒，如果超过这个时间则自动唤醒
+- wait(long) 等待某一时间内是否有线程对锁进行唤醒，如果超过这个时间则自动唤醒。
 
 **wait() 和 sleep() 有什么区别 ？**
 
-	wait 是 Object类的方法，sleep 是 Thread 类的方法
-	sleep 休眠一定时间后自动唤醒，无参数的 wait 需要其他线程 notify
-	wait 释放锁，sleep 不释放锁
+	wait 是 Object类的方法，sleep 是 Thread 类的方法；
+	sleep 休眠一定时间后自动唤醒，无参数的 wait 需要其他线程 notify；
+	wait 释放锁，sleep 不释放锁。
 	
 **方法 join 的使用**
 
-	方法 join 的作用是使所属的线程对象 x 正常执行 run() 方法中的任务，而使当前线程 z 进行无限期的阻塞，等待线程 x 销毁后再继续
-	执行线程 z 后面的代码
+	方法 join 的作用是使所属的线程对象 x 正常执行 run() 方法中的任务，而使当前线程 z 进行无
+	限期的阻塞，等待线程 x 销毁后再继续执行线程 z 后面的代码。
 
-	join 在内部使用 wait() 方法进行等待
+	join 在内部使用 wait() 方法进行等待。
 
-	在join()过程中，如果当前线程对象被中断 interrupt()，则当前线程出现异常
+	在join()过程中，如果当前线程对象被中断 interrupt()，则当前线程出现异常。
 
-#### （3）synchronize 和 volatile
+#### （4）synchronize 和 volatile
 
 **volatile 关键字在 java 中有什么作用？**
 
 	volatile 的作用是强制从公共堆栈中取得变量的值，而不是从线程私有数据栈中取得变量的值。多线
-	程读取共享变量时可以获取最新值.
+	程读取共享变量时可以获取最新值。
+	
 	对于 volatile 修饰的变量， JVM只是保证从主存加载到线程工作内存的值是最新的; 访问
 	volatile变量并不会执行加锁操作，因此不会使执行线程阻塞; volatile 变量解决的是变量在多个
 	线程之间的可见性。
@@ -275,52 +274,11 @@ Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问
 	(3) volatile 保证数据的可见性，但不保证原子性； synchronized 既可以保证原子性，
 		也可以保证可见性，因为它会将私有内存和公有内存的数据做同步;
 	(4) volatile 解决的是变量在多个线程之间的可见性； 而synchronized 解决的是多个线
-		程之间访问资源的同步性.
+		程之间访问资源的同步性。
 		
-#### （4）synchronized 是怎么实现的？
+#### （5）synchronized 实现原理
 
-**Java 对象头与 Monitor**
-
-	在JVM中，对象在内存中的布局分为三块区域：对象头、实例数据和对齐填充。
-	
-对象头的结构如图：
-
-![](https://img-blog.csdnimg.cn/20190415164923950.png)
-
-	synchronized的对象锁，锁标识位为10，其中指针指向的是monitor对象（也称为管程或监视器锁）
-	的起始地址。
-	
-	每个对象都存在着一个 monitor 与之关联，当一个 monitor 被某个线程持有后，它便处于锁定状
-	态。
-	
-	在Java虚拟机(HotSpot)中，monitor是由ObjectMonitor实现的。ObjectMonitor中有两个队列，_WaitSet 和 _EntryList，用来保存ObjectWaiter对象列表( 每个等待锁的线程都会被封装成ObjectWaiter对象)，_owner指向持有ObjectMonitor对象的线程，当多个线程同时访问一段同步代码时，首先会进入 _EntryList 集合，当线程获取到对象的monitor 后进入 _Owner 区域并把monitor中的owner变量设置为当前线程同时monitor中的计数器count加1，若线程调用 wait() 方法，将释放当前持有的monitor，owner变量恢复为null，count自减1，同时该线程进入 WaitSe t集合中等待被唤醒。若当前线程执行完毕也将释放monitor(锁)并复位变量的值，以便其他线程进入获取monitor(锁)。	
-**synchronized 代码块底层原理：**
-
-	synchronized语句块的实现使用的是 monitorenter 和 monitorexit 指令。
-	
-	monitorenter 指令指向同步代码块的开始位置，monitorexit指令则指明同步代码块的结束位置。
-	当执行monitorenter指令时，当前线程将试图获取 objectref(即对象锁) 所对应的 monitor 的
-	持有权，当 objectref 的 monitor 的进入计数器为 0，那线程可以成功取得 monitor，并将计数
-	器值设置为 1，取锁成功。如果当前线程已经拥有 objectref 的 monitor 的持有权，那它可以重入
-	这个 monitor，重入时计数器的值也会加 1。倘若其他线程已经拥有 objectref 的 monitor 的所
-	有权，那当前线程将被阻塞，直到正在执行线程执行完毕，即 monitorexit 指令被执行，执行线程将
-	释放 monitor(锁)并设置计数器值为0 ，其他线程将有机会持有 monitor 。
-	
-	值得注意的是编译器将会确保无论方法通过何种方式完成，方法中调用过的每条 monitorenter 指令
-	都有执行其对应 monitorexit 指令，而无论这个方法是正常结束还是异常结束。
-	
-**synchronized 方法底层原理:**
-
-	方法级的同步是隐式，即无需通过字节码指令来控制的，它实现在方法调用和返回操作之中。
-	
-	JVM可以从方法常量池中的方法表结构(method_info Structure) 中的 ACC_SYNCHRONIZED 访问
-	标志区分一个方法是否同步方法。当方法调用时，调用指令将会检查方法的 ACC_SYNCHRONIZED 访问
-	标志是否被设置，如果设置了，执行线程将先持有monitor（虚拟机规范中用的是管程一词）， 然后再
-	执行方法，最后在方法完成(无论是正常完成还是非正常完成)时释放monitor。
-	
-	在方法执行期间，执行线程持有了monitor，其他任何线程都无法再获得同一个monitor。如果一个同
-	步方法执行期间抛出了异常，并且在方法内部无法处理此异常，那这个同步方法所持有的monitor将在异
-	常抛到同步方法之外时自动释放。
+[深入理解Java并发之synchronized实现原理](https://blog.csdn.net/javazejian/article/details/72828483)
 		
 ### 2.1.2 ReentrantLock
 
@@ -559,20 +517,3 @@ public void signalAll_B(){
 ### 参考资料
 
 - [深入理解Java并发之synchronized实现原理](https://blog.csdn.net/javazejian/article/details/72828483)
-
-
-
-	
-
-
-
-	
-
-
-
-
-
-
-
-
-
