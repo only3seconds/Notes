@@ -7,6 +7,8 @@
 
 ## 一. List
 
+	List集合有一个特点就是元素有序，即元素的存入顺序与其取出顺序一致.
+
 ### 1. ArrayList
 
 ![](https://img-blog.csdnimg.cn/20190313210110896.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
@@ -27,6 +29,13 @@
 	grow() 方法进行扩容，新容量的大小为旧容量的 1.5 倍。扩容操作需要调用 Arrays.copyOf()
 	把原数组整个复制到新数组中，这个操作代价很高，因此最好在创建 ArrayList 对象时就指定大概
 	的容量大小，减少扩容操作的次数。
+	
+#### 增加元素
+
+- 	add（Object element);
+-  add（int index ,  Object element） 将元素 element 插入到List集合中 index 处;
+-  addAll ( Collection c ) ;
+-   addAll ( int index , Collection c )将集合 c 所包含的元素插入到 list集合的 index 处
 	
 #### 删除元素
 
@@ -131,6 +140,7 @@ List<String> list = new CopyOnWriteArrayList<>();
 - 具有 Hashset 的查找效率
 - 内部使用链表维护了元素的插入顺序
 
+
 ### 3. TreeSet
 - 基于红黑树实现，查找效率不如 HashSet, O(logN)
 - 支持有序性操作
@@ -144,6 +154,12 @@ List<String> list = new CopyOnWriteArrayList<>();
 ### 2. PriorityQueue
 - 基于堆结构实现
 - 可以用来实现优先队列
+
+[Java堆结构PriorityQueue完全解析](https://blog.csdn.net/u013309870/article/details/71189189)
+
+- offer(Object element):添加一个元素并向上调整堆；
+- poll():删除堆的根元素并向下调整；
+- peek():返回堆的根元素但不删除该元素。
 
 ## 四. Map
 

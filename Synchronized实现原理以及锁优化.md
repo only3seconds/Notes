@@ -323,12 +323,35 @@ public class SynchronizedTest7 implements Runnable {
 
 ### 1. 可重入性
 
-
 - synchronized 的可重入性是对于同一个线程而言的。
 - 当一个线程拥有某个对象锁后，再次请求该对象锁时，是一定可以获得的。这就是 synchronized的可重入性。
-- 例如，一个线程调用对象instace的同步方法A,成功获取了 instance对象锁，当该线程在方法A中调用instance对象的同步方法B时，线程是可以直接获得 instance 对象锁的。
+- 例如，一个线程调用对象instace的同步方法A,成功获取了 instance对象锁，当该线程在方法A中调用instance对象的同步方法B时，线程是可以直接获得 instance对象锁的。
+
+### 2. 注意点
+
+- 当一个线程执行的代码出现异常时，该线程持有的锁会自动释放。
+- synchronized 不能继承的理解：父类有 synchronized方法 test(),子类继承父类，如果子类没有重写 test，那么子类对象调用 test方法是同步的；如果子类重写 test方法，必须加上 synchronized 关键字才能实现同步。
+
+## 三. Synchronized 实现原理
+
+### 1. 操作系统中的 Monitor
+
+操作系统在面对进程/线程间同步问题的时候，信号量(semaphore)和互斥量（mutex)是最重要的同步原语。为了方便程序员并发开发，操作系统在 semphore 和 mutex 的基础上提出了更高级的同步原语 monitor.
+
+### 2. Java 管程(Monitor)机制
+
+Java monitor 的实现方式是在语法上提供语法糖，而具体如何实现monitor机制是由java编译器实现的。
 
 
+[管程 — Java同步的基本思想](https://blog.csdn.net/qq_33873431/article/details/80348205)
 
+### 2. Java 对象头
+
+
+## 参考资料
+
+[深入理解Java并发之synchronized实现原理](https://blog.csdn.net/javazejian/article/details/72828483)
+
+[monitor的概念](https://www.jianshu.com/p/7f8a873d479c)
 
 
