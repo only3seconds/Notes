@@ -116,6 +116,53 @@ List<String> list = new CopyOnWriteArrayList<>();
 	使用二分查找来看 index 离 size 中间距离来判断是从头结点正序查还是从尾节点倒序查。这样的效率是非常低的，特别是当 index 越
 	接近 size 的中间值时。
 	
+#### LinkedList 操作总结
+
+**add**
+
+- boolean add(E e)：在链表后添加一个元素，如果成功，返回true，否则返回false； 
+- void add(int index, E element)：在指定位置插入一个元素;
+- void addFirst(E e)：在链表头部插入一个元素； 
+- void addLast(E e)：在链表尾部添加一个元素；
+- boolean addAll(Collection c)：在链表尾部添加一个list中所有元素；
+- boolean addAll(int index, Collection c):在指定位置插入一个list中所有元素。
+
+**remove**
+
+- remove()：移除链表中第一个元素； 
+- remove(int index)：移除链表中指定位置的元素；
+- boolean remove(Object o)：移除链表中指定的元素；  
+- removeFirst()：移除链表中第一个元素，与remove类似； 
+- removeLast()：移除链表中最后一个元素； 
+- boolean removeFirstOccurrence(Object o)：移除链表中第一次出现的元素o； 
+- boolean removeLastOccurrence(Object o)：移除链表中最后一次出现的元素o;
+- boolean removeAll(Collection c)：删除链表中出现在 Collection c 中的所有元素；
+
+**get**
+
+get(int index)：按照下边获取元素； 
+getFirst()：获取第一个元素； 
+getLast()：获取最后一个元素.
+
+**push pop poll (栈的操作）**
+
+- push(）：就是 addFirst；
+- pop()：就是 removeFirst；
+- poll()：查询并移除第一个元素。
+poll 与 push 的区别是，当链表为空时，pop抛出异常，poll返回null.
+
+**peek**
+
+- peek()：获取第一个元素，但是不移除； 
+- peekFirst()：获取第一个元素，但是不移除； 
+- peekLast()：获取最后一个元素，但是不移除；
+
+**offer**
+
+- boolean offer(E e)：在链表尾部插入一个元素； 
+- boolean offerFirst(E e)：就是addFirst； 
+- boolean offerLast(E e)：就是addLast；
+	
 #### ArrayList 和 LinkedList
 
 	ArrayList 基于动态数组实现，LinkedList 基于双向链表实现；
