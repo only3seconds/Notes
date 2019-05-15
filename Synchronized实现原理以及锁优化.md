@@ -345,7 +345,11 @@ Java monitor 的实现方式是在语法上提供语法糖，而具体如何实�
 
 [管程 — Java同步的基本思想](https://blog.csdn.net/qq_33873431/article/details/80348205)
 
-### 2. Java 对象头
+### 3. Java 对象头
+
+### 4. 
+
+- 一般而言，synchronized 使用的锁对象是存储在Java对象头里的；
 
 
 ## 参考资料

@@ -231,6 +231,10 @@ poll 与 push 的区别是，当链表为空时，pop抛出异常，poll返回nu
 
 ![](https://img-blog.csdnimg.cn/20190304170933672.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
+**jdk1.8 HashMap为什么当链表长度大于等于8时才转成红黑树？**
+
+因为红黑树的平均查找长度是log（n），长度为8的时候，平均查找长度为3。如果继续使用链表，平均查找长度为8/2=4。这才有转换为树的必要。。链表长度如果是6以内，6/2=3，速度也很快的。转化为树还有生成树的时间，并不明智。中间有个差值，是为了防止链表和树频繁转换。假设8以上转为树，8以下转为链表，那么一个hashmap如果不停的插入删除，链表长度在8左右徘徊，就会不停的树转链表，链表转树，效率很低。
+
 #### (3) Java7 put过程
 
 - 数组初始化： 插入第一个元素的时候做一次数组的初始化，确定初始的数组大小，并计算数组扩容的阈值。
