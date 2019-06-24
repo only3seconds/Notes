@@ -60,22 +60,24 @@ Spring 是一站式框架，在 java ee 三层结构中，每一层都提供不�
 
 ![](https://img-blog.csdnimg.cn/20190328110748721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pvdXJuZXlfVHJpcGxlUA==,size_16,color_FFFFFF,t_70)
 
+[快速记忆](https://blog.csdn.net/qq_32575047/article/details/80416015)
+
 ## 四. Spring & Spring MVC & Spring Boot
 
 Spring 是一个轻量级的 java 开发框架，它的核心是控制反转（IOC）和面向切面（AOP）,针对于开发的WEB层(springMvc)、业务层(Ioc)、持久层(jdbcTemplate)等都提供了多种配置解决方案；
 
 Spring MVC 是spring基础之上的一个MVC框架，主要处理web开发的路径映射和视图渲染，属于spring框架中WEB层开发的一部分；
 
-spring boot 的理念是默认大于配置，它集成了快速开发的spring多个插件，同时自动过滤不需要配置的多余的插件，简化了项目的开发配置流程；
+spring boot 的理念是默认大于配置，它集成了快速开发的spring多个插件，同时自动过滤不需要配置的多余的插件，简化了项目的开发配置流程。
 Spring boot 具有以下特性：
 
-- 快速开发单个微服务；
+- 快速开发单个微服务。
 
-- 无需再像Spring那样搞一堆繁琐的xml文件的配置；可以自动配置Spring。将bean注入改为使用注解注入的方式(@Autowire)，并将多个xml、properties配置浓缩在一个appliaction.yml配置文件中。
+- 无需再像 Spring 那样搞一堆繁琐的 xml 文件的配置；可以自动配置 Spring。将 bean 注入改为使用注解注入的方式(@Autowire)，并将多个 xml、properties 配置浓缩在一个 appliaction.yml 配置文件中。
 
-- 整合常用依赖（开发库，例如spring-webmvc、jackson-json、validation-api和tomcat等），提供的POM可以简化Maven的配置。当我们引入核心依赖时，SpringBoot会自动引入其他依赖。
+- 整合常用依赖（开发库，例如spring-webmvc、jackson-json、validation-api和tomcat等），提供的 POM 可以简化 Maven 的配置。当我们引入核心依赖时，SpringBoot 会自动引入其他依赖。
 
-- 内嵌了Tomcat等容器，可以直接跑起来，用不着再做部署工作了；
+- 内嵌了 Tomcat 等容器，可以直接跑起来，用不着再做部署工作了。
 
 
 
